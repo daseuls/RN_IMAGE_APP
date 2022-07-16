@@ -6,11 +6,13 @@ import {
   View,
   ScrollView,
   Button,
+  FlatList,
 } from 'react-native';
 import {RootStackParamList} from '../types/navigator';
 import {StackScreenProps} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
 import {windowWidth} from '../utils/dimensions';
+import CommentItem from '../components/CommentItem';
 
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
@@ -46,7 +48,13 @@ const DetailScreen = ({route}: IProps) => {
             <FastImage style={styles.photoImage} source={{uri: urls.small}} />
           </View>
         </View>
-        <View style={styles.commentsContainer} />
+        <ScrollView style={styles.commentsContainer}>
+          <FlatList
+            data={commentsList}
+            keyExtractor={(item, i) => `${item}${i}`}
+            renderItem={({item}) => <CommentItem data={item} />}
+          />
+        </ScrollView>
       </ScrollView>
       <TextInput
         style={styles.input}
