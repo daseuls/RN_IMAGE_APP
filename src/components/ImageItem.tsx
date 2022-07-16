@@ -1,6 +1,12 @@
 import {IImageItem} from '../types/index';
 import React, {useEffect, useState} from 'react';
-import {View, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 interface IProps {
@@ -8,13 +14,14 @@ interface IProps {
 }
 
 const ImageItem = ({item}: IProps) => {
+  // const [isLiked, setIsLiked] = useState(false);
   return (
-    <View key={item.id} style={styles.imageContainer}>
+    <TouchableOpacity key={item.id} style={styles.imageContainer}>
       <FastImage
         source={{uri: item.urls.small}}
         style={{...styles.imageItem, height: item.height * 0.07}}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
