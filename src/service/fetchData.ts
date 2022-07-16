@@ -8,6 +8,7 @@ export const getImageList = (page: number) => {
     .get(BASE_URL, {
       params: {
         page,
+        per_page: 24,
       },
     })
     .then(res => {

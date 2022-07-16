@@ -6,7 +6,7 @@ import FastImage from 'react-native-fast-image';
 
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
-const DetailScreen = ({navigate, route}: IProps) => {
+const DetailScreen = ({route}: IProps) => {
   console.log(route.params.data.id);
   const {user} = route.params.data;
   return (

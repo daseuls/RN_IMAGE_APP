@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {getImageList} from '../service/fetchData';
 import MasonryList from '@react-native-seoul/masonry-list';
 import ImageItem from '../components/ImageItem';
@@ -14,8 +14,6 @@ const HomeScreen = () => {
     };
     fetchData();
   }, []);
-
-  console.log(imageList);
 
   return (
     <SafeAreaView style={styles.container}>
