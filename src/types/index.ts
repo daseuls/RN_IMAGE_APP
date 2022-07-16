@@ -4,4 +4,10 @@ export interface IImageItem {
     small: string;
   };
   height: number;
+  user: {
+    name: string;
+    profile_image: {
+      small: string;
+    };
+  };
 }

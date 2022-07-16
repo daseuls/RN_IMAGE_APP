@@ -1,22 +1,23 @@
 import {IImageItem} from '../types/index';
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {useNavigation} from '@react-navigation/native';
 
 interface IProps {
   item: IImageItem;
 }
 
 const ImageItem = ({item}: IProps) => {
-  // const [isLiked, setIsLiked] = useState(false);
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity key={item.id} style={styles.imageContainer}>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('Detail', {data: item});
+      }}
+      key={item.id}
+      style={styles.imageContainer}>
       <FastImage
         source={{uri: item.urls.small}}
         style={{...styles.imageItem, height: item.height * 0.07}}
