@@ -9,6 +9,7 @@ export const getImageList = (page: number) => {
       params: {
         page,
         per_page: 24,
+        order_by: 'popular',
       },
     })
     .then(res => {
