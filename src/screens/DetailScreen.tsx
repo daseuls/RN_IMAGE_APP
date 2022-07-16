@@ -1,5 +1,12 @@
-import React from 'react';
-import {StyleSheet, Text, TextInput, View, ScrollView} from 'react-native';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ScrollView,
+  Button,
+} from 'react-native';
 import {RootStackParamList} from '../types/navigator';
 import {StackScreenProps} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
@@ -9,8 +16,18 @@ type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
 const DetailScreen = ({route}: IProps) => {
   const {user, alt_description, description, urls} = route.params.data;
+  const [commentValue, setCommentValue] = useState('');
+  const [commentsList, setCommentsList] = useState<String[]>([]);
 
-  console.log(route.params.data);
+  const onPressSubmitCommentBtn = () => {
+    if (commentValue) {
+      setCommentsList([...commentsList, commentValue]);
+      setCommentValue('');
+    }
+  };
+
+  console.log(commentsList);
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -35,7 +52,11 @@ const DetailScreen = ({route}: IProps) => {
         style={styles.input}
         placeholder="생각을 나눠보세요."
         keyboardType="numeric"
+        onChangeText={text => setCommentValue(text)}
+        clearTextOnFocus
+        value={commentValue}
       />
+      <Button onPress={onPressSubmitCommentBtn} title="버튼" />
     </View>
   );
 };
