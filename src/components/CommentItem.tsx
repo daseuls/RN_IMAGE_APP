@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 interface IProps {
-  data: string;
+  data: String;
 }
 
 const CommentItem = ({data}: IProps) => {

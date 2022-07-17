@@ -48,13 +48,13 @@ const DetailScreen = ({route}: IProps) => {
             <FastImage style={styles.photoImage} source={{uri: urls.small}} />
           </View>
         </View>
-        <ScrollView style={styles.commentsContainer}>
+        <View style={styles.commentsContainer}>
           <FlatList
             data={commentsList}
             keyExtractor={(item, i) => `${item}${i}`}
             renderItem={({item}) => <CommentItem data={item} />}
           />
-        </ScrollView>
+        </View>
       </ScrollView>
       <TextInput
         style={styles.input}
