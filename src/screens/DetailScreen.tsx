@@ -8,15 +8,16 @@ import {
   Button,
   FlatList,
 } from 'react-native';
-import {RootStackParamList} from '../types/navigator';
-import {StackScreenProps} from '@react-navigation/stack';
-import FastImage from 'react-native-fast-image';
-import {windowWidth} from '../utils/dimensions';
-import CommentItem from '../components/CommentItem';
 import {useDispatch, useSelector} from 'react-redux';
-import {imageInfoSlice} from '../store';
+import {StackScreenProps} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
+import FastImage from 'react-native-fast-image';
+import CommentItem from '../components/CommentItem';
+import {windowWidth} from '../utils/dimensions';
 import {IImageItem, IRootState} from '../types/index';
+import {RootStackParamList} from '../types/navigator';
+import {imageInfoSlice} from '../store';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
@@ -90,15 +91,21 @@ const DetailScreen = ({navigation, route}: IProps) => {
           )}
         </View>
       </ScrollView>
-      <TextInput
-        style={styles.input}
-        placeholder="생각을 나눠보세요."
-        keyboardType="numeric"
-        onChangeText={text => setCommentValue(text)}
-        clearTextOnFocus
-        value={commentValue}
-      />
-      <Button onPress={onPressSubmitCommentBtn} title="버튼" />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="생각을 나눠보세요."
+          keyboardType="numeric"
+          onChangeText={text => setCommentValue(text)}
+          clearTextOnFocus
+          value={commentValue}
+        />
+        <Ionicons
+          onPress={onPressSubmitCommentBtn}
+          name="send"
+          style={styles.sendIcon}
+        />
+      </View>
     </View>
   );
 };
@@ -148,11 +155,24 @@ const styles = StyleSheet.create({
 
   commentsContainer: {},
 
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+
   input: {
     borderColor: '#BCC4D8',
     borderRadius: 15,
     borderWidth: 2,
     padding: 10,
-    marginBottom: 20,
+    width: '100%',
+  },
+
+  sendIcon: {
+    color: '#BCC4D8',
+    fontSize: 20,
+    position: 'absolute',
+    right: 10,
   },
 });

@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {getImageList} from '../service/fetchData';
-import MasonryList from '@react-native-seoul/masonry-list';
-import ImageItem from '../components/ImageItem';
-import AsyncStorage from '@react-native-community/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
+import MasonryList from '@react-native-seoul/masonry-list';
+import AsyncStorage from '@react-native-community/async-storage';
+import ImageItem from '../components/ImageItem';
+import {getImageList} from '../service/fetchData';
 import {imageInfoSlice} from '../store';
 import {IRootState} from '../types';
 
