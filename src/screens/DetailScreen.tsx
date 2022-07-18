@@ -13,22 +13,54 @@ import {StackScreenProps} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
 import {windowWidth} from '../utils/dimensions';
 import CommentItem from '../components/CommentItem';
+import {useDispatch, useSelector} from 'react-redux';
+import {imageInfoSlice} from '../store';
+import AsyncStorage from '@react-native-community/async-storage';
+import {IImageItem, IRootState} from '../types/index';
 
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
-const DetailScreen = ({route}: IProps) => {
-  const {user, alt_description, description, urls} = route.params.data;
+const DetailScreen = ({navigation, route}: IProps) => {
+  const {user, alt_description, description, urls, id, comments} =
+    route.params.data;
   const [commentValue, setCommentValue] = useState('');
-  const [commentsList, setCommentsList] = useState<String[]>([]);
+
+  const dispatch = useDispatch();
+
+  console.log(comments);
+
+  const imageList = useSelector((state: IRootState) => {
+    return state.imageInfo.value;
+  });
 
   const onPressSubmitCommentBtn = () => {
     if (commentValue) {
-      setCommentsList([...commentsList, commentValue]);
       setCommentValue('');
+      if (comments) {
+        const updatedList = imageList.map((imageInfo: IImageItem) =>
+          imageInfo.id === id
+            ? {...imageInfo, comments: [...imageInfo.comments, commentValue]}
+            : imageInfo,
+        );
+        navigation.setParams({
+          data: {...route.params.data, comments: [...comments, commentValue]},
+        });
+        dispatch(imageInfoSlice.actions.update(updatedList));
+        AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
+      } else {
+        const updatedList = imageList.map((imageInfo: IImageItem) =>
+          imageInfo.id === id
+            ? {...imageInfo, comments: [commentValue]}
+            : imageInfo,
+        );
+        navigation.setParams({
+          data: {...route.params.data, comments: [commentValue]},
+        });
+        dispatch(imageInfoSlice.actions.update(updatedList));
+        AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
+      }
     }
   };
-
-  console.log(commentsList);
 
   return (
     <View style={styles.container}>
@@ -49,11 +81,13 @@ const DetailScreen = ({route}: IProps) => {
           </View>
         </View>
         <View style={styles.commentsContainer}>
-          <FlatList
-            data={commentsList}
-            keyExtractor={(item, i) => `${item}${i}`}
-            renderItem={({item}) => <CommentItem data={item} />}
-          />
+          {comments && (
+            <FlatList
+              data={comments}
+              keyExtractor={(item, i) => `${item}${i}`}
+              renderItem={({item}) => <CommentItem data={item} />}
+            />
+          )}
         </View>
       </ScrollView>
       <TextInput

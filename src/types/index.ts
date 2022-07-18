@@ -10,4 +10,15 @@ export interface IImageItem {
       small: string;
     };
   };
+  comments: string[];
+  alt_description: string;
+  description: string;
+}
+
+export interface IImageItemState {
+  value: IImageItem[];
+}
+
+export interface IRootState {
+  imageInfo: IImageItemState;
 }
