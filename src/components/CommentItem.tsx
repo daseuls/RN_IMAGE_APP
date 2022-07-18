@@ -1,13 +1,6 @@
-import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ScrollView,
-  Button,
-  FlatList,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface IProps {
   data: String;
@@ -16,7 +9,10 @@ interface IProps {
 const CommentItem = ({data}: IProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.comment}>{data}</Text>
+      <Ionicons name="heart" style={styles.likeIcon} />
+      <View style={styles.commentContainer}>
+        <Text style={styles.comment}>{data}</Text>
+      </View>
     </View>
   );
 };
@@ -25,7 +21,14 @@ export default CommentItem;
 
 const styles = StyleSheet.create({
   container: {
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    alignItems: 'flex-end',
     marginTop: 5,
+  },
+
+  commentContainer: {
     backgroundColor: 'black',
     paddingHorizontal: 20,
     paddingVertical: 15,
@@ -33,10 +36,15 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     borderTopLeftRadius: 10,
-    alignSelf: 'flex-end',
   },
 
   comment: {
     color: 'white',
+  },
+
+  likeIcon: {
+    color: 'red',
+    fontSize: 20,
+    marginRight: 2,
   },
 });
