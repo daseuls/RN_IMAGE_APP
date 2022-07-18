@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ScrollView,
-  Button,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, Text, TextInput, View, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackScreenProps} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -65,32 +57,33 @@ const DetailScreen = ({navigation, route}: IProps) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.userInfoContainer}>
-          <FastImage
-            style={styles.userImage}
-            source={{uri: user.profile_image.small}}
-          />
-          <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userRole}> · Instructor</Text>
-        </View>
-        <View>
-          <Text>{alt_description}</Text>
-          <Text>{description}</Text>
-          <View style={styles.imageContainer}>
-            <FastImage style={styles.photoImage} source={{uri: urls.small}} />
-          </View>
-        </View>
-        <View style={styles.commentsContainer}>
-          {comments && (
-            <FlatList
-              data={comments}
-              keyExtractor={(item, i) => `${item}${i}`}
-              renderItem={({item}) => <CommentItem data={item} />}
-            />
-          )}
-        </View>
-      </ScrollView>
+      <FlatList
+        ListHeaderComponent={
+          <>
+            <View style={styles.userInfoContainer}>
+              <FastImage
+                style={styles.userImage}
+                source={{uri: user.profile_image.small}}
+              />
+              <Text style={styles.userName}>{user.name}</Text>
+              <Text style={styles.userRole}> · Instructor</Text>
+            </View>
+            <View>
+              <Text>{alt_description}</Text>
+              <Text>{description}</Text>
+              <View style={styles.imageContainer}>
+                <FastImage
+                  style={styles.photoImage}
+                  source={{uri: urls.small}}
+                />
+              </View>
+            </View>
+          </>
+        }
+        data={comments}
+        keyExtractor={(item, i) => `${item}${i}`}
+        renderItem={({item}) => <CommentItem data={item} />}
+      />
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
