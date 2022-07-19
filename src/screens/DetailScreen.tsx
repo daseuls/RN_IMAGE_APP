@@ -79,6 +79,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
         ? {...imageInfo, comments: updatedCommentList}
         : imageInfo,
     );
+
     navigation.setParams({
       data: {
         ...route.params.data,

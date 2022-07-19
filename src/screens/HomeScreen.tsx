@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import ImageItem from '../components/ImageItem';
 import {getImageList} from '../service/fetchData';
 import {imageInfoSlice} from '../store';
-import {IRootState} from '../types';
+import {IImageItem, IRootState} from '../types';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -14,6 +14,8 @@ const HomeScreen = () => {
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
   });
+
+  console.log(imageList);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,12 +29,29 @@ const HomeScreen = () => {
           dispatch(imageInfoSlice.actions.update(JSON.parse(result))); // 로컬에 들은거 스토어 저장
         });
       } else {
-        AsyncStorage.setItem('imageList', JSON.stringify(res.data));
-        dispatch(imageInfoSlice.actions.update(res.data)); // 데이터 받은거 스토어에 저장
+        AsyncStorage.setItem(
+          'imageList',
+          JSON.stringify(
+            res.data.map((el: IImageItem) => ({...el, isBookmarked: false})),
+          ),
+        );
+        dispatch(
+          imageInfoSlice.actions.update(
+            res.data.map((el: IImageItem) => ({...el, isBookmarked: false})),
+          ),
+        ); // 데이터 받은거 스토어에 저장
       }
     };
     fetchData();
   }, [dispatch]);
+
+  const onPressBookmarkBtn = (id, bool) => {
+    const updatedList = imageList.map(el =>
+      el.id === id ? {...el, isBookmarked: bool} : el,
+    );
+    dispatch(imageInfoSlice.actions.update(updatedList));
+    AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,7 +59,9 @@ const HomeScreen = () => {
         keyExtractor={(item): string => item.id}
         numColumns={2}
         data={imageList}
-        renderItem={({item}) => <ImageItem item={item} />}
+        renderItem={({item}) => (
+          <ImageItem item={item} onPressBookmarkBtn={onPressBookmarkBtn} />
+        )}
       />
     </SafeAreaView>
   );

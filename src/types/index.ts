@@ -13,6 +13,7 @@ export interface IImageItem {
   comments: ICommentItem[];
   alt_description: string;
   description: string;
+  isBookmarked: boolean;
 }
 
 export interface ICommentItem {
