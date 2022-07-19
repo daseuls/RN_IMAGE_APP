@@ -10,9 +10,15 @@ export interface IImageItem {
       small: string;
     };
   };
-  comments: string[];
+  comments: ICommentItem[];
   alt_description: string;
   description: string;
+}
+
+export interface ICommentItem {
+  id: number;
+  text: string;
+  isLiked: boolean;
 }
 
 export interface IImageItemState {

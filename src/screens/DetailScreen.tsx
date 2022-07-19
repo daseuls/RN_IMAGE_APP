@@ -20,8 +20,6 @@ const DetailScreen = ({navigation, route}: IProps) => {
 
   const dispatch = useDispatch();
 
-  console.log(comments);
-
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
   });
@@ -29,30 +27,66 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const onPressSubmitCommentBtn = () => {
     if (commentValue) {
       setCommentValue('');
+
+      const commentData = {
+        id: new Date().valueOf(),
+        text: commentValue,
+        isLiked: false,
+      };
+
       if (comments) {
         const updatedList = imageList.map((imageInfo: IImageItem) =>
           imageInfo.id === id
-            ? {...imageInfo, comments: [...imageInfo.comments, commentValue]}
+            ? {
+                ...imageInfo,
+                comments: [...imageInfo.comments, commentData],
+              }
             : imageInfo,
         );
         navigation.setParams({
-          data: {...route.params.data, comments: [...comments, commentValue]},
+          data: {
+            ...route.params.data,
+            comments: [...comments, commentData],
+          },
         });
         dispatch(imageInfoSlice.actions.update(updatedList));
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
       } else {
         const updatedList = imageList.map((imageInfo: IImageItem) =>
           imageInfo.id === id
-            ? {...imageInfo, comments: [commentValue]}
+            ? {...imageInfo, comments: [commentData]}
             : imageInfo,
         );
         navigation.setParams({
-          data: {...route.params.data, comments: [commentValue]},
+          data: {
+            ...route.params.data,
+            comments: [commentData],
+          },
         });
         dispatch(imageInfoSlice.actions.update(updatedList));
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
       }
     }
+  };
+
+  const onPressLikeBtn = (commentId: number, bool: boolean) => {
+    const updatedCommentList = comments.map(comment =>
+      comment.id === commentId ? {...comment, isLiked: bool} : comment,
+    );
+
+    const updatedImageList = imageList.map(imageInfo =>
+      imageInfo.id === id
+        ? {...imageInfo, comments: updatedCommentList}
+        : imageInfo,
+    );
+    navigation.setParams({
+      data: {
+        ...route.params.data,
+        comments: updatedCommentList,
+      },
+    });
+    dispatch(imageInfoSlice.actions.update(updatedImageList));
+    AsyncStorage.setItem('imageList', JSON.stringify(updatedImageList));
   };
 
   return (
@@ -82,7 +116,9 @@ const DetailScreen = ({navigation, route}: IProps) => {
         }
         data={comments}
         keyExtractor={(item, i) => `${item}${i}`}
-        renderItem={({item}) => <CommentItem data={item} />}
+        renderItem={({item}) => (
+          <CommentItem data={item} onPressLikeBtn={onPressLikeBtn} />
+        )}
       />
       <View style={styles.inputContainer}>
         <TextInput

@@ -1,17 +1,35 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
+import {ICommentItem, IRootState} from '../types';
 
 interface IProps {
-  data: String;
+  data: ICommentItem;
+  onPressLikeBtn: any;
 }
 
-const CommentItem = ({data}: IProps) => {
+const CommentItem = ({data, onPressLikeBtn}: IProps) => {
+  const {isLiked, text, id} = data;
+
   return (
     <View style={styles.container}>
-      <Ionicons name="heart" style={styles.likeIcon} />
+      {isLiked ? (
+        <Ionicons
+          onPress={() => onPressLikeBtn(id, !isLiked)}
+          name="heart"
+          style={styles.likeIcon}
+        />
+      ) : (
+        <Ionicons
+          onPress={() => onPressLikeBtn(id, !isLiked)}
+          name="heart"
+          style={{...styles.likeIcon, color: 'gray'}}
+        />
+      )}
+
       <View style={styles.commentContainer}>
-        <Text style={styles.comment}>{data}</Text>
+        <Text style={styles.comment}>{text}</Text>
       </View>
     </View>
   );
