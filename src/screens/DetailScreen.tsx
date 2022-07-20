@@ -17,6 +17,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const {user, alt_description, description, urls, id, comments} =
     route.params.data;
   const [commentValue, setCommentValue] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
 
