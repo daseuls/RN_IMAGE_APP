@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  Button,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Button, SafeAreaView, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import MasonryList from '@react-native-seoul/masonry-list';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -15,7 +7,6 @@ import ImageItem from '../components/ImageItem';
 import {getImageList} from '../service/fetchData';
 import {imageInfoSlice} from '../store';
 import {IImageItem, IRootState} from '../types';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -59,14 +50,6 @@ const HomeScreen = () => {
     );
     dispatch(imageInfoSlice.actions.update(updatedList));
     AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
-  };
-
-  const renderLoadMoreBtn = () => {
-    return (
-      <View>
-        <Text>Load More</Text>
-      </View>
-    );
   };
 
   const handleLoadMoreData = () => {
