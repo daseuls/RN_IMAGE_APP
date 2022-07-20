@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {StyleSheet, Text, TextInput, View, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -19,6 +19,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const [commentValue, setCommentValue] = useState('');
 
   const dispatch = useDispatch();
+  const flatListRef = useRef<FlatList<any>>();
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
@@ -67,6 +68,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
       }
     }
+    flatListRef.current?.scrollToEnd();
   };
 
   const onPressCommentLikeBtn = (commentId: number, bool: boolean) => {
@@ -107,6 +109,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
   return (
     <View style={styles.container}>
       <FlatList
+        ref={flatListRef}
         ListHeaderComponent={
           <View style={styles.contentsContainer}>
             <View style={styles.userInfoContainer}>
