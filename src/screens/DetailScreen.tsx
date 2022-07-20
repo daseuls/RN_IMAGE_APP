@@ -108,7 +108,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
     <View style={styles.container}>
       <FlatList
         ListHeaderComponent={
-          <>
+          <View style={styles.contentsContainer}>
             <View style={styles.userInfoContainer}>
               <FastImage
                 style={styles.userImage}
@@ -127,9 +127,11 @@ const DetailScreen = ({navigation, route}: IProps) => {
                 />
               </View>
             </View>
-          </>
+          </View>
         }
         data={comments}
+        inverted
+        contentContainerStyle={styles.flatListContainer}
         keyExtractor={(item, i) => `${item}${i}`}
         renderItem={({item}) => (
           <CommentItem
@@ -138,6 +140,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
           />
         )}
       />
+
       <View style={styles.likedIconContainer}>
         <Ionicons
           onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
@@ -212,7 +215,14 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
 
-  contentsContainer: {},
+  contentsContainer: {
+    justifyContent: 'flex-end',
+  },
+
+  flatListContainer: {
+    flexDirection: 'column-reverse',
+    flexGrow: 1,
+  },
 
   imageContainer: {
     alignItems: 'center',
