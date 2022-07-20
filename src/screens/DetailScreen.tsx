@@ -14,7 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
 const DetailScreen = ({navigation, route}: IProps) => {
-  const {user, alt_description, description, urls, id, comments} =
+  const {user, alt_description, description, urls, id, comments, isBookmarked} =
     route.params.data;
   const [commentValue, setCommentValue] = useState('');
 
@@ -69,7 +69,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
     }
   };
 
-  const onPressLikeBtn = (commentId: number, bool: boolean) => {
+  const onPressCommentLikeBtn = (commentId: number, bool: boolean) => {
     const updatedCommentList = comments.map(comment =>
       comment.id === commentId ? {...comment, isLiked: bool} : comment,
     );
@@ -88,6 +88,20 @@ const DetailScreen = ({navigation, route}: IProps) => {
     });
     dispatch(imageInfoSlice.actions.update(updatedImageList));
     AsyncStorage.setItem('imageList', JSON.stringify(updatedImageList));
+  };
+
+  const onPressBookmarkBtn = (imageId: string, bool: boolean) => {
+    const updatedList = imageList.map(el =>
+      el.id === imageId ? {...el, isBookmarked: bool} : el,
+    );
+    navigation.setParams({
+      data: {
+        ...route.params.data,
+        isBookmarked: bool,
+      },
+    });
+    dispatch(imageInfoSlice.actions.update(updatedList));
+    AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
   };
 
   return (
@@ -118,9 +132,30 @@ const DetailScreen = ({navigation, route}: IProps) => {
         data={comments}
         keyExtractor={(item, i) => `${item}${i}`}
         renderItem={({item}) => (
-          <CommentItem data={item} onPressLikeBtn={onPressLikeBtn} />
+          <CommentItem
+            data={item}
+            onPressCommentLikeBtn={onPressCommentLikeBtn}
+          />
         )}
       />
+      <View style={styles.likedIconContainer}>
+        <Ionicons
+          onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
+          name="heart-sharp"
+          size={30}
+          color={isBookmarked ? '#FF7272' : '#C4C8D3'}
+          style={styles.likeBtn}
+        />
+        <Text
+          style={{
+            ...styles.likedText,
+            color: isBookmarked ? '#585A5F' : '#B9BDC7',
+          }}>
+          {isBookmarked
+            ? '좋아한 게시글이에요 !'
+            : '게시글이 맘에 들면 좋아요를 눌러보세요!'}
+        </Text>
+      </View>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -185,6 +220,22 @@ const styles = StyleSheet.create({
 
   commentsContainer: {},
 
+  likedIconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    borderTopColor: '#BCC4D8',
+    borderTopWidth: 1,
+  },
+
+  likedText: {
+    fontWeight: '700',
+  },
+
+  likeBtn: {
+    marginRight: 5,
+  },
+
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -194,8 +245,8 @@ const styles = StyleSheet.create({
   input: {
     borderColor: '#BCC4D8',
     borderRadius: 15,
-    borderWidth: 2,
-    padding: 10,
+    borderWidth: 1.5,
+    padding: 12,
     width: '100%',
   },
 

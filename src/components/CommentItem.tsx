@@ -5,28 +5,21 @@ import {ICommentItem} from '../types';
 
 interface IProps {
   data: ICommentItem;
-  onPressLikeBtn: any;
+  onPressCommentLikeBtn: any;
 }
 
-const CommentItem = ({data, onPressLikeBtn}: IProps) => {
+const CommentItem = ({data, onPressCommentLikeBtn}: IProps) => {
   const {isLiked, text, id} = data;
 
   return (
     <View style={styles.container}>
-      {isLiked ? (
-        <Ionicons
-          onPress={() => onPressLikeBtn(id, !isLiked)}
-          name="heart"
-          style={styles.likeIcon}
-        />
-      ) : (
-        <Ionicons
-          onPress={() => onPressLikeBtn(id, !isLiked)}
-          name="heart"
-          style={{...styles.likeIcon, color: 'gray'}}
-        />
-      )}
-
+      <Ionicons
+        onPress={() => onPressCommentLikeBtn(id, !isLiked)}
+        name="heart"
+        size={18}
+        color={isLiked ? '#FF7272' : '#C4C8D3'}
+        style={styles.likeIcon}
+      />
       <View style={styles.commentContainer}>
         <Text style={styles.comment}>{text}</Text>
       </View>
@@ -60,8 +53,6 @@ const styles = StyleSheet.create({
   },
 
   likeIcon: {
-    color: 'red',
-    fontSize: 20,
-    marginRight: 2,
+    marginRight: 3,
   },
 });
