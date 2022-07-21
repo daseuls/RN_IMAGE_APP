@@ -1,5 +1,12 @@
 import React, {useRef, useState} from 'react';
-import {StyleSheet, Text, TextInput, View, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  FlatList,
+  TouchableNativeFeedback,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackScreenProps} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -10,6 +17,7 @@ import {IImageItem, IRootState} from '../types/index';
 import {RootStackParamList} from '../types/navigator';
 import {imageInfoSlice} from '../store';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
@@ -17,6 +25,9 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const {user, alt_description, description, urls, id, comments, isBookmarked} =
     route.params.data;
   const [commentValue, setCommentValue] = useState('');
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [isContentsShowing, setIsContentsShowing] = useState(true);
+  const [isShowingBtn, setIsShowingBtn] = useState(false);
 
   const dispatch = useDispatch();
   const flatListRef = useRef<FlatList<any>>();
@@ -68,7 +79,6 @@ const DetailScreen = ({navigation, route}: IProps) => {
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
       }
     }
-    flatListRef.current?.scrollToEnd();
   };
 
   const onPressCommentLikeBtn = (commentId: number, bool: boolean) => {
@@ -104,14 +114,37 @@ const DetailScreen = ({navigation, route}: IProps) => {
     });
     dispatch(imageInfoSlice.actions.update(updatedList));
     AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
+    flatListRef.current?.scrollToOffset({offset: 608});
+  };
+
+  const handleScrollEvent = e => {
+    const {contentSize, layoutMeasurement, contentOffset} = e.nativeEvent;
+    if (contentOffset.y > 10) {
+      setIsShowingBtn(true);
+    } else {
+      setIsShowingBtn(false);
+    }
+
+    if (
+      contentSize.height - layoutMeasurement.height - headerHeight <
+      contentOffset.y
+    ) {
+      setIsContentsShowing(true);
+    } else {
+      setIsContentsShowing(false);
+    }
   };
 
   return (
     <View style={styles.container}>
       <FlatList
         ref={flatListRef}
+        onScroll={handleScrollEvent}
+        scrollEventThrottle={100}
         ListHeaderComponent={
-          <View style={styles.contentsContainer}>
+          <View
+            onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)}
+            style={styles.contentsContainer}>
             <View style={styles.userInfoContainer}>
               <FastImage
                 style={styles.userImage}
@@ -143,7 +176,23 @@ const DetailScreen = ({navigation, route}: IProps) => {
           />
         )}
       />
-
+      {!isContentsShowing && (
+        <View style={styles.previewContentsContainer}>
+          <TouchableOpacity
+            style={{backgroundColor: 'red', height: '100%'}}
+            onPress={() => flatListRef.current?.scrollToOffset({offset: 5000})}>
+            <Text>스크롤에 따라 보여지는 화면</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {isShowingBtn && (
+        <TouchableNativeFeedback
+          onPress={() => flatListRef.current?.scrollToEnd()}>
+          <View style={styles.moveCurrentCommentBtn}>
+            <Text style={styles.btnText}>최신 댓글로</Text>
+          </View>
+        </TouchableNativeFeedback>
+      )}
       <View style={styles.likedIconContainer}>
         <Ionicons
           onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
@@ -186,7 +235,9 @@ export default DetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 10,
+    paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   userInfoContainer: {
@@ -225,6 +276,7 @@ const styles = StyleSheet.create({
   flatListContainer: {
     flexDirection: 'column-reverse',
     flexGrow: 1,
+    paddingHorizontal: 10,
   },
 
   imageContainer: {
@@ -239,6 +291,8 @@ const styles = StyleSheet.create({
     padding: 8,
     borderTopColor: '#BCC4D8',
     borderTopWidth: 1,
+    marginHorizontal: 10,
+    width: '100%',
   },
 
   likedText: {
@@ -253,6 +307,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    marginHorizontal: 10,
   },
 
   input: {
@@ -268,5 +323,40 @@ const styles = StyleSheet.create({
     fontSize: 20,
     position: 'absolute',
     right: 10,
+  },
+
+  previewContentsContainer: {
+    // borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
+    borderColor: '#BCC4D8',
+    padding: 20,
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 100,
+    backgroundColor: 'white',
+  },
+
+  moveCurrentCommentBtn: {
+    position: 'absolute',
+    bottom: 130,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+
+    elevation: 1,
+  },
+
+  btnText: {
+    fontWeight: '900',
+    color: '#FF7272',
   },
 });
