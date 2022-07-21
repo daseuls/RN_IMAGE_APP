@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
 
   commentContainer: {
-    backgroundColor: 'black',
+    backgroundColor: '#FFD24C',
     paddingHorizontal: 20,
     paddingVertical: 15,
     alignItems: 'flex-end',
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
 
   comment: {
-    color: 'white',
+    // color: 'white',
   },
 
   likeIcon: {

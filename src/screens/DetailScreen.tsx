@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
 
   contentsContainer: {
     justifyContent: 'flex-end',
+    marginBottom: 10,
   },
 
   previewContentsContainer: {
