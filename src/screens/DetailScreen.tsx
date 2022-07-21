@@ -24,6 +24,7 @@ type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 const DetailScreen = ({navigation, route}: IProps) => {
   const {user, alt_description, description, urls, id, comments, isBookmarked} =
     route.params.data;
+
   const [commentValue, setCommentValue] = useState('');
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isContentsShowing, setIsContentsShowing] = useState(true);
@@ -178,11 +179,11 @@ const DetailScreen = ({navigation, route}: IProps) => {
       />
       {!isContentsShowing && (
         <View style={styles.previewContentsContainer}>
-          <TouchableOpacity
-            style={{backgroundColor: 'red', height: '100%'}}
+          <TouchableNativeFeedback
             onPress={() => flatListRef.current?.scrollToOffset({offset: 5000})}>
-            <Text>스크롤에 따라 보여지는 화면</Text>
-          </TouchableOpacity>
+            <Text>{description}</Text>
+          </TouchableNativeFeedback>
+          <Ionicons name="chevron-up" size={20} />
         </View>
       )}
       {isShowingBtn && (
@@ -288,7 +289,8 @@ const styles = StyleSheet.create({
   likedIconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     borderTopColor: '#BCC4D8',
     borderTopWidth: 1,
     marginHorizontal: 10,
@@ -326,20 +328,22 @@ const styles = StyleSheet.create({
   },
 
   previewContentsContainer: {
-    // borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
     borderColor: '#BCC4D8',
-    padding: 20,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
     position: 'absolute',
     top: 0,
     width: '100%',
     zIndex: 100,
     backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
   moveCurrentCommentBtn: {
     position: 'absolute',
-    bottom: 130,
+    bottom: 135,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
@@ -351,7 +355,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.18,
     shadowRadius: 1.0,
-
     elevation: 1,
   },
 
