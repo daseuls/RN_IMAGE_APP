@@ -18,8 +18,6 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const {user, alt_description, description, urls, id, comments} =
     route.params.data;
 
-  console.log(comments);
-
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isContentsShowing, setIsContentsShowing] = useState(true);
   const [isShowingBtn, setIsShowingBtn] = useState(false);

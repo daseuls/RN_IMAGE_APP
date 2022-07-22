@@ -5,6 +5,8 @@ import {
   TouchableNativeFeedback,
   StyleSheet,
   TextInput,
+  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -19,7 +21,9 @@ const CommentBar = ({
   isShowingBtn,
   flatListRef,
 }) => {
-  const {description, id, comments, isBookmarked} = data;
+  const {id, comments, isBookmarked, user} = data;
+
+  console.log(data);
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
@@ -71,6 +75,7 @@ const CommentBar = ({
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
       }
     }
+    flatListRef.current?.scrollToEnd();
   };
 
   const onPressBookmarkBtn = (imageId: string, bool: boolean) => {
@@ -90,13 +95,13 @@ const CommentBar = ({
   return (
     <>
       {!isContentsShowing && (
-        <View style={styles.previewContentsContainer}>
-          <TouchableNativeFeedback
-            onPress={() => flatListRef.current?.scrollToOffset({offset: 5000})}>
-            <Text>{description}</Text>
-          </TouchableNativeFeedback>
-          <Ionicons name="chevron-up" size={20} />
-        </View>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.previewContentsContainer}
+          onPress={() => flatListRef.current?.scrollToOffset({offset: 5000})}>
+          <Text style={styles.previewText}>{user.name}님의 작성 게시글</Text>
+          <Ionicons name="chevron-up" size={20} color="#3D3C42" />
+        </TouchableOpacity>
       )}
       {isShowingBtn && (
         <TouchableNativeFeedback
@@ -199,6 +204,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+
+  previewText: {
+    fontWeight: '600',
+    color: '#3D3C42',
   },
 
   moveCurrentCommentBtn: {
