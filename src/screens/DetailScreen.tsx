@@ -78,7 +78,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
         ListFooterComponent={
           comments ? null : (
             <View style={styles.previewContentsContainer}>
-              <EvilIcons name="comment" size={50} color="#B9BDC7" />
+              <EvilIcons name="comment" size={40} color="#B9BDC7" />
               <Text style={styles.previewContentsText}>생각을 나눠보세요</Text>
             </View>
           )
@@ -96,8 +96,12 @@ const DetailScreen = ({navigation, route}: IProps) => {
               <Text style={styles.userRole}> · Instructor</Text>
             </View>
             <View style={styles.descriptionContainer}>
-              <Text style={styles.description}>{description}</Text>
-              <Text style={styles.description}>{alt_description}</Text>
+              {description && (
+                <Text style={styles.description}>{description}</Text>
+              )}
+              {alt_description && (
+                <Text style={styles.description}>{alt_description}</Text>
+              )}
             </View>
             <FastImage style={styles.photoImage} source={{uri: urls.small}} />
           </View>
@@ -185,10 +189,10 @@ const styles = StyleSheet.create({
   },
 
   previewContentsText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
     color: '#B9BDC7',
-    marginTop: 10,
+    marginTop: 5,
   },
 
   flatListContainer: {
