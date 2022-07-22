@@ -11,8 +11,19 @@ export const imageInfoSlice = createSlice({
   },
 });
 
+export const pageNumberSlice = createSlice({
+  name: 'pageNumberSlice',
+  initialState: {value: 2},
+  reducers: {
+    increase: (state, action) => {
+      state.value = action.payload;
+    },
+  },
+});
+
 export const store = configureStore({
   reducer: {
     imageInfo: imageInfoSlice.reducer,
+    pageNumber: pageNumberSlice.reducer,
   },
 });

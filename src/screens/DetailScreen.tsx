@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   FlatList,
@@ -8,16 +8,16 @@ import {
   NativeScrollEvent,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {StackScreenProps} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
+import {StackScreenProps} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import CommentItem from '../components/CommentItem';
+import CommentBar from '../components/CommentBar';
 import {windowWidth} from '../utils/dimensions';
 import {IRootState} from '../types/index';
 import {RootStackParamList} from '../types/navigator';
 import {imageInfoSlice} from '../store';
-import CommentBar from '../components/CommentBar';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
@@ -25,28 +25,36 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const {user, alt_description, description, urls, id, comments} =
     route.params.data;
 
+  const dispatch = useDispatch();
+  const flatListRef = useRef<FlatList>(null);
+
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isContentsShowing, setIsContentsShowing] = useState(true);
   const [isShowingBtn, setIsShowingBtn] = useState(false);
 
-  const dispatch = useDispatch();
-  const flatListRef = useRef<FlatList>(null);
+  useEffect(() => {
+    if (comments?.length >= 10) {
+      setIsContentsShowing(false);
+    }
+  }, [comments]);
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
+  });
+
+  const pageNumber = useSelector((state: IRootState) => {
+    return state.pageNumber.value;
   });
 
   const onPressCommentLikeBtn = (commentId: number, bool: boolean) => {
     const updatedCommentList = comments.map(comment =>
       comment.id === commentId ? {...comment, isLiked: bool} : comment,
     );
-
     const updatedImageList = imageList.map(imageInfo =>
       imageInfo.id === id
         ? {...imageInfo, comments: updatedCommentList}
         : imageInfo,
     );
-
     navigation.setParams({
       data: {
         ...route.params.data,
@@ -55,6 +63,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
     });
     dispatch(imageInfoSlice.actions.update(updatedImageList));
     AsyncStorage.setItem('imageList', JSON.stringify(updatedImageList));
+    AsyncStorage.setItem('page', JSON.stringify(pageNumber));
   };
 
   const handleScrollEvent = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -62,7 +71,6 @@ const DetailScreen = ({navigation, route}: IProps) => {
     if (comments) {
       contentOffset.y > 10 ? setIsShowingBtn(true) : setIsShowingBtn(false);
     }
-
     contentSize.height - layoutMeasurement.height - headerHeight <
     contentOffset.y
       ? setIsContentsShowing(true)
@@ -73,8 +81,18 @@ const DetailScreen = ({navigation, route}: IProps) => {
     <View style={styles.container}>
       <FlatList
         ref={flatListRef}
+        keyExtractor={(item, i) => `${item}${i}`}
+        data={comments}
+        contentContainerStyle={styles.flatListContainer}
         onScroll={handleScrollEvent}
         scrollEventThrottle={100}
+        inverted
+        renderItem={({item}) => (
+          <CommentItem
+            data={item}
+            onPressCommentLikeBtn={onPressCommentLikeBtn}
+          />
+        )}
         ListFooterComponent={
           comments ? null : (
             <View style={styles.previewContentsContainer}>
@@ -106,23 +124,13 @@ const DetailScreen = ({navigation, route}: IProps) => {
             <FastImage style={styles.photoImage} source={{uri: urls.small}} />
           </View>
         }
-        data={comments}
-        inverted
-        contentContainerStyle={styles.flatListContainer}
-        keyExtractor={(item, i) => `${item}${i}`}
-        renderItem={({item}) => (
-          <CommentItem
-            data={item}
-            onPressCommentLikeBtn={onPressCommentLikeBtn}
-          />
-        )}
       />
       <CommentBar
         data={route.params.data}
         navigation={navigation}
+        flatListRef={flatListRef}
         isContentsShowing={isContentsShowing}
         isShowingBtn={isShowingBtn}
-        flatListRef={flatListRef}
       />
     </View>
   );
@@ -133,9 +141,9 @@ export default DetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 10,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
   },
 
   userInfoContainer: {
@@ -146,8 +154,8 @@ const styles = StyleSheet.create({
   userImage: {
     width: 40,
     height: 40,
-    borderRadius: 50,
     marginRight: 10,
+    borderRadius: 50,
   },
 
   userName: {
@@ -156,9 +164,9 @@ const styles = StyleSheet.create({
   },
 
   userRole: {
+    color: '#7D88A8',
     fontSize: windowWidth * 0.04,
     fontWeight: '700',
-    color: '#7D88A8',
   },
 
   descriptionContainer: {
@@ -166,9 +174,9 @@ const styles = StyleSheet.create({
   },
 
   description: {
+    color: '#3D3C42',
     fontSize: 16,
     fontWeight: '600',
-    color: '#3D3C42',
   },
 
   photoImage: {
@@ -183,21 +191,21 @@ const styles = StyleSheet.create({
   },
 
   previewContentsContainer: {
-    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
   },
 
   previewContentsText: {
+    marginTop: 5,
+    color: '#B9BDC7',
     fontSize: 14,
     fontWeight: '700',
-    color: '#B9BDC7',
-    marginTop: 5,
   },
 
   flatListContainer: {
-    flexDirection: 'column-reverse',
     flexGrow: 1,
+    flexDirection: 'column-reverse',
     paddingHorizontal: 10,
   },
 });

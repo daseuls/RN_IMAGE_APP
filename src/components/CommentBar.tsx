@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {IImageItem, IRootState} from '../types';
 import {imageInfoSlice} from '../store';
 
@@ -31,23 +31,26 @@ const CommentBar = ({
 }: IProps) => {
   const {id, comments, isBookmarked, user} = data;
 
-  const imageList = useSelector((state: IRootState) => {
-    return state.imageInfo.value;
-  });
   const dispatch = useDispatch();
 
   const [commentValue, setCommentValue] = useState('');
 
+  const imageList = useSelector((state: IRootState) => {
+    return state.imageInfo.value;
+  });
+
+  const pageNumber = useSelector((state: IRootState) => {
+    return state.pageNumber.value;
+  });
+
   const onPressSubmitCommentBtn = () => {
     if (commentValue) {
       setCommentValue('');
-
       const commentData = {
         id: new Date().valueOf(),
         text: commentValue,
         isLiked: false,
       };
-
       if (comments) {
         const updatedList = imageList.map((imageInfo: IImageItem) =>
           imageInfo.id === id
@@ -82,6 +85,7 @@ const CommentBar = ({
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
       }
     }
+    AsyncStorage.setItem('page', JSON.stringify(pageNumber));
   };
 
   const onPressBookmarkBtn = (imageId: string, bool: boolean) => {
@@ -102,9 +106,13 @@ const CommentBar = ({
     <>
       {!isContentsShowing && (
         <TouchableOpacity
-          activeOpacity={1}
           style={styles.previewContentsContainer}
-          onPress={() => flatListRef.current?.scrollToOffset({offset: 5000})}>
+          activeOpacity={1}
+          onPress={() =>
+            flatListRef.current?.scrollToOffset({
+              offset: Number.MAX_SAFE_INTEGER,
+            })
+          }>
           <Text style={styles.previewText}>{user.name}님의 작성 게시글</Text>
           <Ionicons name="chevron-up" size={20} color="#3D3C42" />
         </TouchableOpacity>
@@ -119,11 +127,11 @@ const CommentBar = ({
       )}
       <View style={styles.likedIconContainer}>
         <Ionicons
+          style={styles.likeBtn}
+          color={isBookmarked ? '#FF7272' : '#C4C8D3'}
           onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
           name="heart-sharp"
           size={30}
-          color={isBookmarked ? '#FF7272' : '#C4C8D3'}
-          style={styles.likeBtn}
         />
         <Text
           style={{
@@ -160,12 +168,12 @@ const styles = StyleSheet.create({
   likedIconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
     paddingHorizontal: 15,
     paddingVertical: 10,
+    marginHorizontal: 10,
     borderTopColor: '#BCC4D8',
     borderTopWidth: 1,
-    marginHorizontal: 10,
-    width: '100%',
   },
 
   likedText: {
@@ -179,42 +187,42 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
     marginHorizontal: 10,
+    marginBottom: 20,
   },
 
   input: {
+    width: '100%',
+    padding: 12,
     borderColor: '#BCC4D8',
     borderRadius: 15,
     borderWidth: 1.5,
-    padding: 12,
-    width: '100%',
   },
 
   sendIcon: {
-    color: '#BCC4D8',
-    fontSize: 20,
     position: 'absolute',
     right: 10,
+    color: '#BCC4D8',
+    fontSize: 20,
   },
 
   previewContentsContainer: {
-    borderBottomWidth: 0.5,
-    borderColor: '#BCC4D8',
-    paddingHorizontal: 30,
-    paddingVertical: 20,
     position: 'absolute',
     top: 0,
-    width: '100%',
-    zIndex: 100,
-    backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 30,
+    paddingVertical: 20,
+    borderBottomWidth: 0.5,
+    borderColor: '#BCC4D8',
+    backgroundColor: 'white',
+    zIndex: 100,
   },
 
   previewText: {
-    fontWeight: '600',
     color: '#3D3C42',
+    fontWeight: '600',
   },
 
   moveCurrentCommentBtn: {
@@ -222,20 +230,20 @@ const styles = StyleSheet.create({
     bottom: 135,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 20,
     backgroundColor: 'white',
+    borderRadius: 20,
     shadowColor: '#000',
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.18,
-    shadowRadius: 1.0,
-    elevation: 1,
   },
 
   btnText: {
-    fontWeight: '900',
     color: '#FF7272',
+    fontWeight: '900',
   },
 });

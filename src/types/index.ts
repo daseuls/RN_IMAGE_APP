@@ -22,10 +22,15 @@ export interface ICommentItem {
   isLiked: boolean;
 }
 
+// redux store type
 export interface IImageItemState {
   value: IImageItem[];
 }
 
+export interface IPageNumberState {
+  value: number;
+}
 export interface IRootState {
   imageInfo: IImageItemState;
+  pageNumber: IPageNumberState;
 }

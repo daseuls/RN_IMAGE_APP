@@ -1,6 +1,11 @@
 import {IImageItem} from '.';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined;
   Detail: {data: IImageItem};
 };
+
+export type IDetailScreenProp = StackNavigationProp<
+  RootStackParamList,
+  'Detail'
+>;
