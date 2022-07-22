@@ -1,75 +1,42 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, View, FlatList} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {
+  StyleSheet,
+  FlatList,
+  Text,
+  View,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackScreenProps} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 import FastImage from 'react-native-fast-image';
 import CommentItem from '../components/CommentItem';
 import {windowWidth} from '../utils/dimensions';
-import {IImageItem, IRootState} from '../types/index';
+import {IRootState} from '../types/index';
 import {RootStackParamList} from '../types/navigator';
 import {imageInfoSlice} from '../store';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import CommentBar from '../components/CommentBar';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
 const DetailScreen = ({navigation, route}: IProps) => {
   const {user, alt_description, description, urls, id, comments} =
     route.params.data;
-  const [commentValue, setCommentValue] = useState('');
+
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [isContentsShowing, setIsContentsShowing] = useState(true);
+  const [isShowingBtn, setIsShowingBtn] = useState(false);
 
   const dispatch = useDispatch();
+  const flatListRef = useRef<FlatList>(null);
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
   });
 
-  const onPressSubmitCommentBtn = () => {
-    if (commentValue) {
-      setCommentValue('');
-
-      const commentData = {
-        id: new Date().valueOf(),
-        text: commentValue,
-        isLiked: false,
-      };
-
-      if (comments) {
-        const updatedList = imageList.map((imageInfo: IImageItem) =>
-          imageInfo.id === id
-            ? {
-                ...imageInfo,
-                comments: [...imageInfo.comments, commentData],
-              }
-            : imageInfo,
-        );
-        navigation.setParams({
-          data: {
-            ...route.params.data,
-            comments: [...comments, commentData],
-          },
-        });
-        dispatch(imageInfoSlice.actions.update(updatedList));
-        AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
-      } else {
-        const updatedList = imageList.map((imageInfo: IImageItem) =>
-          imageInfo.id === id
-            ? {...imageInfo, comments: [commentData]}
-            : imageInfo,
-        );
-        navigation.setParams({
-          data: {
-            ...route.params.data,
-            comments: [commentData],
-          },
-        });
-        dispatch(imageInfoSlice.actions.update(updatedList));
-        AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
-      }
-    }
-  };
-
-  const onPressLikeBtn = (commentId: number, bool: boolean) => {
+  const onPressCommentLikeBtn = (commentId: number, bool: boolean) => {
     const updatedCommentList = comments.map(comment =>
       comment.id === commentId ? {...comment, isLiked: bool} : comment,
     );
@@ -90,11 +57,36 @@ const DetailScreen = ({navigation, route}: IProps) => {
     AsyncStorage.setItem('imageList', JSON.stringify(updatedImageList));
   };
 
+  const handleScrollEvent = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const {contentSize, layoutMeasurement, contentOffset} = e.nativeEvent;
+    if (comments) {
+      contentOffset.y > 10 ? setIsShowingBtn(true) : setIsShowingBtn(false);
+    }
+
+    contentSize.height - layoutMeasurement.height - headerHeight <
+    contentOffset.y
+      ? setIsContentsShowing(true)
+      : setIsContentsShowing(false);
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
+        ref={flatListRef}
+        onScroll={handleScrollEvent}
+        scrollEventThrottle={100}
+        ListFooterComponent={
+          comments ? null : (
+            <View style={styles.previewContentsContainer}>
+              <EvilIcons name="comment" size={40} color="#B9BDC7" />
+              <Text style={styles.previewContentsText}>생각을 나눠보세요</Text>
+            </View>
+          )
+        }
         ListHeaderComponent={
-          <>
+          <View
+            onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)}
+            style={styles.contentsContainer}>
             <View style={styles.userInfoContainer}>
               <FastImage
                 style={styles.userImage}
@@ -103,39 +95,35 @@ const DetailScreen = ({navigation, route}: IProps) => {
               <Text style={styles.userName}>{user.name}</Text>
               <Text style={styles.userRole}> · Instructor</Text>
             </View>
-            <View>
-              <Text>{alt_description}</Text>
-              <Text>{description}</Text>
-              <View style={styles.imageContainer}>
-                <FastImage
-                  style={styles.photoImage}
-                  source={{uri: urls.small}}
-                />
-              </View>
+            <View style={styles.descriptionContainer}>
+              {description && (
+                <Text style={styles.description}>{description}</Text>
+              )}
+              {alt_description && (
+                <Text style={styles.description}>{alt_description}</Text>
+              )}
             </View>
-          </>
+            <FastImage style={styles.photoImage} source={{uri: urls.small}} />
+          </View>
         }
         data={comments}
+        inverted
+        contentContainerStyle={styles.flatListContainer}
         keyExtractor={(item, i) => `${item}${i}`}
         renderItem={({item}) => (
-          <CommentItem data={item} onPressLikeBtn={onPressLikeBtn} />
+          <CommentItem
+            data={item}
+            onPressCommentLikeBtn={onPressCommentLikeBtn}
+          />
         )}
       />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="생각을 나눠보세요."
-          keyboardType="numeric"
-          onChangeText={text => setCommentValue(text)}
-          clearTextOnFocus
-          value={commentValue}
-        />
-        <Ionicons
-          onPress={onPressSubmitCommentBtn}
-          name="send"
-          style={styles.sendIcon}
-        />
-      </View>
+      <CommentBar
+        data={route.params.data}
+        navigation={navigation}
+        isContentsShowing={isContentsShowing}
+        isShowingBtn={isShowingBtn}
+        flatListRef={flatListRef}
+      />
     </View>
   );
 };
@@ -145,7 +133,9 @@ export default DetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 10,
+    paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   userInfoContainer: {
@@ -171,38 +161,43 @@ const styles = StyleSheet.create({
     color: '#7D88A8',
   },
 
-  photoImage: {
-    width: windowWidth * 0.9,
-    height: windowWidth * 0.9,
-    borderRadius: 15,
-  },
-
-  contentsContainer: {},
-
-  imageContainer: {
-    alignItems: 'center',
-  },
-
-  commentsContainer: {},
-
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-
-  input: {
-    borderColor: '#BCC4D8',
-    borderRadius: 15,
-    borderWidth: 2,
+  descriptionContainer: {
     padding: 10,
-    width: '100%',
   },
 
-  sendIcon: {
-    color: '#BCC4D8',
-    fontSize: 20,
-    position: 'absolute',
-    right: 10,
+  description: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#3D3C42',
+  },
+
+  photoImage: {
+    width: windowWidth * 0.95,
+    height: windowWidth * 0.95,
+    borderRadius: 15,
+  },
+
+  contentsContainer: {
+    justifyContent: 'flex-end',
+    marginBottom: 10,
+  },
+
+  previewContentsContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  previewContentsText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#B9BDC7',
+    marginTop: 5,
+  },
+
+  flatListContainer: {
+    flexDirection: 'column-reverse',
+    flexGrow: 1,
+    paddingHorizontal: 10,
   },
 });

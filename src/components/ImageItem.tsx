@@ -27,19 +27,13 @@ const ImageItem = ({item, onPressBookmarkBtn}: IProps) => {
           style={{...styles.imageItem, height: height * 0.07}}
         />
       </TouchableOpacity>
-      {isBookmarked ? (
-        <Ionicons
-          onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
-          name="heart"
-          style={styles.likeIcon}
-        />
-      ) : (
-        <Ionicons
-          onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
-          name="heart"
-          style={{...styles.likeIcon, color: 'gray'}}
-        />
-      )}
+      <Ionicons
+        name="heart"
+        color={isBookmarked ? '#FF7272' : '#C4C8D3'}
+        style={styles.likeIcon}
+        size={20}
+        onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
+      />
     </>
   );
 };
@@ -61,8 +55,7 @@ const styles = StyleSheet.create({
   },
 
   likeIcon: {
-    color: 'red',
-    fontSize: 20,
     marginLeft: 8,
+    alignSelf: 'flex-start',
   },
 });
