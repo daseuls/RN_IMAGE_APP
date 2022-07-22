@@ -2,7 +2,7 @@
 
 # 사용 기술 / 라이브러리
 
-- JavaScript, TypeScript, React Native
+- JavaScript, TypeScript, React Native(React-Native-CLI로 초기 세팅)
 - Redux-toolkit (상태 관리)
 - react icon (아이콘)
 - [react-native-masonry-list (이미지 리스트 레이아웃)](https://github.com/hyochan/react-native-masonry-list#readme)
