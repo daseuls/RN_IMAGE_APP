@@ -1,45 +1,62 @@
 # Classom Assignment
 
+클라썸 React Native 프론트엔드 개발 구현 과제 입니다.
+
+> 개발자 : 이다슬<br>
+> 개발 기간 : 7/15 - 7/22
+
 # 사용 기술 / 라이브러리
 
-- JavaScript, TypeScript, React Native(React-Native-CLI로 초기 세팅)
-- Redux-toolkit (상태 관리)
-- react icon (아이콘)
+- JavaScript, TypeScript, React Native([React-Native-CLI](https://reactnative.dev/docs/environment-setup)로 초기 세팅)
+- [Redux-toolkit (상태 관리)](https://redux-toolkit.js.org/)
+- [react-native-async-storage (로컬 데이터 저장)](https://reactnative.dev/docs/asyncstorage)
 - [react-native-masonry-list (이미지 리스트 레이아웃)](https://github.com/hyochan/react-native-masonry-list#readme)
-- react-fastImage (빠른 이미지 로딩)
-- react navigation (스크린 이동)
+- [react-native-fast-image (이미지 로딩 최적화)](https://github.com/DylanVann/react-native-fast-image#readme)
+- [react-navigation (스크린 이동)](https://reactnavigation.org/docs/getting-started/)
 
 # 실행 방법
 
-1.
+시작 전 xcode와 android studio를 설치 해주세요.
 
-```
-git clone https://github.com/daseuls/classom_assignment.git
-```
+1. 파일 다운로드
+
+2. 해당 폴더로 이동
 
 ```
 cd classom_assignment
 ```
 
+3. 필요 package 설치
+
 ```
 yarn install
 ```
+
+4. ios 폴더로 이동
 
 ```
 cd ios
 ```
 
+5. pod 설치
+
 ```
 pod install
 ```
+
+6. 상위 폴더로 이동
 
 ```
 ..
 ```
 
+7. metro start
+
 ```
 npx react-native start
 ```
+
+6. ios 또는 android 시뮬레이터 시작
 
 ```
 npx react-native run-ios
@@ -81,12 +98,12 @@ npx react-native run-android
 
 - Redux toolkit store와 AsyncStorage 이용
 
-  이미지는 unsplash의 오픈 API를 이용했습니다. 받은 데이터를 리덕스 스토어 저장을 하고, 저장된 스토어의 값을 렌더링 해주었습니다. 앱이 reload시에도 데이터를 유지 시키기 위해 AsyncStorage를 이용해서 스토어에 저장된 값과 동기화 시켜주었습니다.
-  따라서 첫 렌더링 시 AsyncStorage의 값이 비었다면 API로 받아온 데이터 값을 저장해주었고, AsyncStorage의 값이 있다면 AsyncStorage의 값을 가져와서 리덕스 스토어를 업데이트 시켜주었습니다.
+  이미지는 unsplash의 오픈 API를 이용했습니다. 받은 데이터를 리덕스 스토어 저장을 하고, 저장된 스토어의 값을 렌더링 해주었습니다. 앱이 reload시에도 데이터를 유지 시키기 위해 `AsyncStorage`를 이용해서 스토어에 저장된 값과 동기화 시켜주었습니다.
+  따라서 첫 렌더링 시 `AsyncStorage`의 값이 비었다면 API로 받아온 데이터 값을 저장해주었고, `AsyncStorage`의 값이 있다면 `AsyncStorage`의 값을 가져와서 리덕스 스토어를 업데이트 시켜주었습니다.
 
 - Redux store와 AsyncStorage에 저장한 state들
 
-  imagelist info와 page number를 저장했습니다. image list에 좋아요, 댓글들, 댓글의 좋아요의 이벤트들이 실행될 때마다 값을 store에 저장하고 AsyncStorage에 동기화 시켜주었습니다. page number를 저장한 이유는, 추가적으로 더 불러온 image list에 좋아요를 하거나 댓글을 달았을 때 추가된 리스트들까지 store와 AsyncStorage에 저장되기 때문에 re-load시 추가적으로 더 불러온 리스트들까지 화면에 보여지게 됩니다. 그 다음 page의 데이터를 추가적으로 더 불러오기 위해서는 page의 값도 저장을 해야 했습니다.
+  `imagelist info`와 `page number`를 저장했습니다. image list에 좋아요, 댓글들, 댓글의 좋아요의 이벤트들이 실행될 때마다 값을 store에 저장하고 AsyncStorage에 동기화 시켜주었습니다. page number를 저장한 이유는, 추가적으로 더 불러온 image list에 좋아요를 하거나 댓글을 달았을 때 추가된 리스트들까지 store와 AsyncStorage에 저장되기 때문에 re-load시 추가적으로 더 불러온 리스트들까지 화면에 보여지게 됩니다. 그 다음 page의 데이터를 추가적으로 더 불러오기 위해서는 page의 값도 저장을 해야 했습니다.
   </details>
 
 <details>
@@ -107,7 +124,7 @@ npx react-native run-android
 <details>
 <summary>4. Detail 페이지 이동</summary>
 
-- react-navigation을 이용해 해당 image를 클릭 시 DetailScreen이라는 Stack.Screen으로 이동할 수 있게 했습니다. 필요한 데이터 값은 navigation의 props로 전달해준 뒤 DetailScreen에서 렌더링 해주었습니다.
+- `react-navigation`을 이용해 해당 image를 클릭 시 DetailScreen이라는 Stack.Screen으로 이동할 수 있게 했습니다. 필요한 데이터 값은 navigation의 props로 전달해준 뒤 DetailScreen에서 렌더링 해주었습니다.
 </details>
 
 ### 게시글 상세
@@ -121,7 +138,7 @@ npx react-native run-android
 <details>
 <summary>2. 최하단 이동 버튼</summary>
 
-- FlatList의 onScroll 이벤트에 contentOffset.y의 값을 통해 스크롤이 된 정도의 여부를 isShowinBtn이라는 state를 통해 업데이트 시켜주었습니다. 이 state를 통해 스크롤이 어느 정도 되었다면 이 버튼을 보여주었고 버튼 클릭 시 scrollToEnd() 메서드를 이용해 최하단으로 이동 시켰습니다.
+- FlatList의 onScroll 이벤트에 contentOffset.y의 값을 통해 스크롤이 된 정도의 여부를 isShowingBtn이라는 state를 통해 업데이트 시켜주었습니다. 이 state를 통해 스크롤이 어느 정도 되었다면 이 버튼을 보여주었고 버튼 클릭 시 `scrollToEnd()` 메서드를 이용해 최하단으로 이동 시켰습니다.
 </details>
 
 <details>
@@ -134,6 +151,11 @@ npx react-native run-android
 
 1. 이미지 리스트 Load more 기능을 구현하는 과정에서 발생한 이슈
 
-- masynryList 라이브러리에서도 flatList와 같이 `onEndReachedThreshold`, `onEndReached` 메서드 사용이 가능했기에 두 메서드를 이용하여 infinite Scroll을 구현하고 싶었으나, <br />
+- masonryList 라이브러리에서도 flatList와 같이 `onEndReachedThreshold`, `onEndReached` 메서드 사용이 가능했기에 두 메서드를 이용하여 infinite Scroll을 구현하고 싶었으나,
   masonsy 라이브러리 사용시 `onEndReached` 함수 호출 시 [해당 함수가 여러 번 호출되는 이슈](https://github.com/hyochan/react-native-masonry-list/issues/11)와 <br />
   `onEndReach` 함수가 `onEndReachedThreshold`의 정확하지 않은 위치에서 실행되는 이슈가 있었습니다. 따라서 [해당 라이브러리 issue에 등록](https://github.com/hyochan/react-native-masonry-list/issues/41) 후 부득이하게 버튼을 통해 Load more를 구현하였습니다.
+  <br>
+  <br>
+  <br>
+
+부족하지만 저의 실력 내에서 열심히 구현해보았습니다. 감사합니다.
