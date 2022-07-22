@@ -1,14 +1,13 @@
 import React, {useEffect} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import MasonryList from '@react-native-seoul/masonry-list';
 import AsyncStorage from '@react-native-community/async-storage';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ImageItem from '../components/ImageItem';
 import {getImageList} from '../service/fetchData';
 import {imageInfoSlice, pageNumberSlice} from '../store';
 import {IImageItem, IRootState} from '../types';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -26,16 +25,20 @@ const HomeScreen = () => {
       const localData = await AsyncStorage.getItem('imageList');
       if (localData) {
         AsyncStorage.getItem('imageList', (err, result) => {
+          if (result) {
+            dispatch(imageInfoSlice.actions.update(JSON.parse(result)));
+          }
           if (err) {
             console.log(err);
           }
-          dispatch(imageInfoSlice.actions.update(JSON.parse(result)));
         });
         AsyncStorage.getItem('page', (err, result) => {
+          if (result) {
+            dispatch(pageNumberSlice.actions.increase(JSON.parse(result)));
+          }
           if (err) {
             console.log(err);
           }
-          dispatch(pageNumberSlice.actions.increase(JSON.parse(result)));
         });
       } else {
         const res = await getImageList(1);
