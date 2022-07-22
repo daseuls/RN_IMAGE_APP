@@ -11,13 +11,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {StackScreenProps} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import CommentItem from '../components/CommentItem';
 import CommentBar from '../components/CommentBar';
 import {windowWidth} from '../utils/dimensions';
 import {IRootState} from '../types/index';
 import {RootStackParamList} from '../types/navigator';
 import {imageInfoSlice} from '../store';
+import CommentSvg from '../assets/icon/comments-solid.svg';
 
 type IProps = StackScreenProps<RootStackParamList, 'Detail'>;
 
@@ -97,7 +97,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
         ListFooterComponent={
           comments ? null : (
             <View style={styles.previewContentsContainer}>
-              <EvilIcons name="comment" size={40} color="#B9BDC7" />
+              <CommentSvg width={40} height={40} fill={'#B9BDC7'} />
               <Text style={styles.previewContentsText}>생각을 나눠보세요</Text>
             </View>
           )

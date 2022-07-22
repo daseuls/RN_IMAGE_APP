@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ICommentItem} from '../types';
+import HeartSvg from '../assets/icon/heart-solid.svg';
 
 interface IProps {
   data: ICommentItem;
@@ -13,12 +13,12 @@ const CommentItem = ({data, handleCommentLike}: IProps) => {
 
   return (
     <View style={styles.container}>
-      <Ionicons
+      <HeartSvg
         onPress={() => handleCommentLike(id, !isLiked)}
-        name="heart"
-        size={18}
-        color={isLiked ? '#FF7272' : '#C4C8D3'}
+        fill={isLiked ? '#FF7272' : '#C4C8D3'}
         style={styles.likeIcon}
+        width={15}
+        height={13}
       />
       <View style={styles.commentContainer}>
         <Text>{text}</Text>

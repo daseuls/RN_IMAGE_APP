@@ -3,11 +3,11 @@ import {SafeAreaView, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import MasonryList from '@react-native-seoul/masonry-list';
 import AsyncStorage from '@react-native-community/async-storage';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ImageItem from '../components/ImageItem';
 import {getImageList} from '../service/fetchData';
 import {imageInfoSlice, pageNumberSlice} from '../store';
 import {IImageItem, IRootState} from '../types';
+import MoreSvg from '../assets/icon/angle-down-solid.svg';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -97,7 +97,7 @@ const HomeScreen = () => {
         ListFooterComponent={
           <TouchableOpacity onPress={handleLoadMoreData}>
             <View style={styles.moreDataBtn}>
-              <MaterialIcons name="expand-more" size={50} color="gray" />
+              <MoreSvg width={30} height={50} fill={'gray'} />
             </View>
           </TouchableOpacity>
         }

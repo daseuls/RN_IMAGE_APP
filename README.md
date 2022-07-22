@@ -60,7 +60,9 @@ npx react-native start
 
 ```
 npx react-native run-ios
+
 or
+
 npx react-native run-android
 ```
 
@@ -68,7 +70,7 @@ npx react-native run-android
 
 > ✅ 체크 표시 한 것들은 구현 완료된 기능입니다.
 
-### 1. 게시글 목록
+### **게시글 목록**
 
 - ✅ 사진과 같이 ListItem의 height는 Dynamic입니다. (contents size)
 - ✅ 본문 내용을 보여주시면됩니다. 최대한 이미지를 많이 사용해주세요.
@@ -78,7 +80,7 @@ npx react-native run-android
 - ✅ 게시글 상세의 좋아요 버튼을 터치 했을 때, 리스트에 해당 내용이 반영되어야합니다.
 - ✅ 게시글의 데이터는 많을수록 좋습니다. 최소 1000개 이상.
 
-### 2. 게시글 상세
+### **게시글 상세**
 
 - ✅ 게시글 상세는 정보를 보여주는 View와 해당 콘텐츠에 대한 댓글형식의 ListItem들이 표시되어야 합니다.
 - ✅ 작성자의 정보가 표기되어야합니다. 또한 Text와 게시글 목록에서 보이던 이미지가 노출되어야 합니다.
@@ -89,9 +91,11 @@ npx react-native run-android
 - ✅ 스크롤을 내렸을때 본문에 있는 텍스트만 간단하게 bar형태로 보여주시면됩니다.
 - ✅ 우측의 위로 화살표를 터치하면 본문이 펼쳐지며, 최상단으로 이동해야합니다.
 
+<br>
+
 # 구현 기능 상세
 
-### 게시글 목록
+### **게시글 목록**
 
 <details>
 <summary>1. 이미지 데이터 렌더링, 데이터 저장 관리</summary>
@@ -127,7 +131,7 @@ npx react-native run-android
 - `react-navigation`을 이용해 해당 image를 클릭 시 DetailScreen이라는 Stack.Screen으로 이동할 수 있게 했습니다. 필요한 데이터 값은 navigation의 props로 전달해준 뒤 DetailScreen에서 렌더링 해주었습니다.
 </details>
 
-### 게시글 상세
+### **게시글 상세**
 
 <details>
 <summary> 1. 댓글 달기 / 댓글 좋아요</summary>
@@ -146,6 +150,8 @@ npx react-native run-android
 
 - FlatList의 onScroll 이벤트에 `contentSize.height - layoutMeasurement.height - headerHeight < contentOffset.y`를 통해 본문의 게시글이 화면에서 안보이게 되는 스크롤의 위치를 계산한 뒤 isContentsShowing이라는 state를 각 스크롤 위치에 따라 업데이트 시켜준 뒤 본문 텍스트 bar를 보여주었습니다.
 </details>
+
+<br>
 
 # 구현 시 발생한 이슈 / 해결 과정
 

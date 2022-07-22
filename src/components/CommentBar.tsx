@@ -10,9 +10,11 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {IImageItem, IRootState} from '../types';
 import {imageInfoSlice} from '../store';
+import HeartSvg from '../assets/icon/heart-solid.svg';
+import SendSvg from '../assets/icon/paper-plane-solid.svg';
+import UpSvg from '../assets/icon/chevron-up-solid.svg';
 
 interface IProps {
   data: IImageItem;
@@ -114,7 +116,7 @@ const CommentBar = ({
             })
           }>
           <Text style={styles.previewText}>{user.name}님의 작성 게시글</Text>
-          <Ionicons name="chevron-up" size={20} color="#3D3C42" />
+          <UpSvg width={15} height={20} fill={'#3D3C42'} />
         </TouchableOpacity>
       )}
       {isShowingBtn && (
@@ -126,18 +128,14 @@ const CommentBar = ({
         </TouchableNativeFeedback>
       )}
       <View style={styles.likedIconContainer}>
-        <Ionicons
+        <HeartSvg
           style={styles.likeBtn}
-          color={isBookmarked ? '#FF7272' : '#C4C8D3'}
+          fill={isBookmarked ? '#FF7272' : '#C4C8D3'}
           onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
-          name="heart-sharp"
-          size={30}
+          width={25}
+          height={25}
         />
-        <Text
-          style={{
-            ...styles.likedText,
-            color: isBookmarked ? '#585A5F' : '#B9BDC7',
-          }}>
+        <Text style={isBookmarked ? styles.likedText : styles.disLikedText}>
           {isBookmarked
             ? '좋아한 게시글이에요 !'
             : '게시글이 맘에 들면 좋아요를 눌러보세요!'}
@@ -152,10 +150,12 @@ const CommentBar = ({
           clearTextOnFocus
           value={commentValue}
         />
-        <Ionicons
+        <SendSvg
           onPress={onPressSubmitCommentBtn}
-          name="send"
           style={styles.sendIcon}
+          width={20}
+          height={20}
+          fill={'#BCC4D8'}
         />
       </View>
     </>
@@ -178,6 +178,12 @@ const styles = StyleSheet.create({
 
   likedText: {
     fontWeight: '700',
+    color: '#585A5F',
+  },
+
+  disLikedText: {
+    fontWeight: '700',
+    color: '#B9BDC7',
   },
 
   likeBtn: {
@@ -201,9 +207,7 @@ const styles = StyleSheet.create({
 
   sendIcon: {
     position: 'absolute',
-    right: 10,
-    color: '#BCC4D8',
-    fontSize: 20,
+    right: 15,
   },
 
   previewContentsContainer: {

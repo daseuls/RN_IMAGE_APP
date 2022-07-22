@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {IImageItem} from '../types/index';
 import {IDetailScreenProp} from '../types/navigator';
+import HeartSvg from '../assets/icon/heart-solid.svg';
 
 interface IProps {
   item: IImageItem;
@@ -28,11 +28,11 @@ const ImageItem = ({item, handleImageListBookmark}: IProps) => {
           style={{...styles.imageItem, height: height * 0.07}}
         />
       </TouchableOpacity>
-      <Ionicons
-        name="heart"
-        color={isBookmarked ? '#FF7272' : '#C4C8D3'}
+      <HeartSvg
         style={styles.likeIcon}
-        size={20}
+        width={20}
+        height={20}
+        fill={isBookmarked ? '#FF7272' : '#C4C8D3'}
         onPress={() => handleImageListBookmark(id, !isBookmarked)}
       />
     </>
