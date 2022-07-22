@@ -11,6 +11,40 @@
 
 # 실행 방법
 
+```
+git clone https://github.com/daseuls/classom_assignment.git
+```
+
+```
+cd classom_assignment
+```
+
+```
+yarn install
+```
+
+```
+cd ios
+```
+
+```
+pod install
+```
+
+```
+..
+```
+
+```
+npx react-native start
+```
+
+```
+npx react-native run-ios
+or
+npx react-native run-android
+```
+
 # 요구 사항
 
 > ✅ 체크 표시 한 것들은 구현 완료된 기능입니다.
