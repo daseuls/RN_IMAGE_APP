@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Button,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import MasonryList from '@react-native-seoul/masonry-list';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -24,6 +17,12 @@ const HomeScreen = () => {
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
   });
+
+  const pageNumber = useSelector((state: IRootState) => {
+    return state.pageNumber.value;
+  });
+
+  console.log(pageNumber);
 
   useEffect(() => {
     const fetchData = async () => {
