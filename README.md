@@ -95,6 +95,10 @@ npx react-native run-android
 
 # 구현 기능 상세
 
+<img width="500" alt="스크린샷 2022-07-23 오전 2 48 56" src="https://user-images.githubusercontent.com/71131248/180495691-c861f9ec-f5df-491e-bf02-80cf84d0e457.png">
+
+<br>
+
 > 토글 아이콘을 누르면 상세 구현 내용을 확인할 수 있습니다.
 
 ### **게시글 목록**
