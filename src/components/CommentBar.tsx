@@ -108,7 +108,11 @@ const CommentBar = ({
         <TouchableOpacity
           style={styles.previewContentsContainer}
           activeOpacity={1}
-          onPress={() => flatListRef.current?.scrollToOffset({offset: 5000})}>
+          onPress={() =>
+            flatListRef.current?.scrollToOffset({
+              offset: Number.MAX_SAFE_INTEGER,
+            })
+          }>
           <Text style={styles.previewText}>{user.name}님의 작성 게시글</Text>
           <Ionicons name="chevron-up" size={20} color="#3D3C42" />
         </TouchableOpacity>
