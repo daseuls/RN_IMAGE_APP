@@ -22,6 +22,8 @@ interface IProps {
   isShowingBtn: boolean;
   navigation: any;
   flatListRef: RefObject<FlatList<any>>;
+  commentItemHeight: number;
+  headerHeight: number;
 }
 
 const CommentBar = ({
@@ -30,8 +32,13 @@ const CommentBar = ({
   isContentsShowing,
   isShowingBtn,
   flatListRef,
+  commentItemHeight,
+  headerHeight,
 }: IProps) => {
   const {id, comments, isBookmarked, user} = data;
+
+  const contentOffset =
+    (commentItemHeight + 15) * comments?.length + headerHeight;
 
   const dispatch = useDispatch();
 
@@ -112,7 +119,7 @@ const CommentBar = ({
           activeOpacity={1}
           onPress={() =>
             flatListRef.current?.scrollToOffset({
-              offset: Number.MAX_SAFE_INTEGER,
+              offset: contentOffset,
             })
           }>
           <Text style={styles.previewText}>{user.name}님의 작성 게시글</Text>
@@ -145,7 +152,6 @@ const CommentBar = ({
         <TextInput
           style={styles.input}
           placeholder="생각을 나눠보세요."
-          keyboardType="numeric"
           onChangeText={text => setCommentValue(text)}
           clearTextOnFocus
           value={commentValue}

@@ -29,6 +29,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const flatListRef = useRef<FlatList>(null);
 
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [commentItemHeight, setCommentItemHeight] = useState(0);
   const [isContentsShowing, setIsContentsShowing] = useState(true);
   const [isShowingBtn, setIsShowingBtn] = useState(false);
 
@@ -92,7 +93,11 @@ const DetailScreen = ({navigation, route}: IProps) => {
         scrollEventThrottle={100}
         inverted
         renderItem={({item}) => (
-          <CommentItem data={item} handleCommentLike={handleCommentLike} />
+          <CommentItem
+            data={item}
+            handleCommentLike={handleCommentLike}
+            setCommentItemHeight={setCommentItemHeight}
+          />
         )}
         ListFooterComponent={
           comments ? null : (
@@ -129,6 +134,8 @@ const DetailScreen = ({navigation, route}: IProps) => {
       <CommentBar
         data={route.params.data}
         navigation={navigation}
+        commentItemHeight={commentItemHeight}
+        headerHeight={headerHeight}
         flatListRef={flatListRef}
         isContentsShowing={isContentsShowing}
         isShowingBtn={isShowingBtn}

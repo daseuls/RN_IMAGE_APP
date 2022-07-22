@@ -95,6 +95,8 @@ npx react-native run-android
 
 # 구현 기능 상세
 
+> 토글 아이콘을 누르면 상세 구현 내용을 확인할 수 있습니다.
+
 ### **게시글 목록**
 
 <details>
@@ -158,7 +160,7 @@ npx react-native run-android
 1. 이미지 리스트 Load more 기능을 구현하는 과정에서 발생한 이슈
 
 - masonryList 라이브러리에서도 flatList와 같이 `onEndReachedThreshold`, `onEndReached` 메서드 사용이 가능했기에 두 메서드를 이용하여 infinite Scroll을 구현하고 싶었으나,
-  masonsy 라이브러리 사용시 `onEndReached` 함수 호출 시 [해당 함수가 여러 번 호출되는 이슈](https://github.com/hyochan/react-native-masonry-list/issues/11)와 <br />
+  masonsy 라이브러리 사용시 `onEndReached` 함수 호출 시 [해당 함수가 여러 번 호출되는 이슈](https://github.com/hyochan/react-native-masonry-list/issues/11)와
   `onEndReach` 함수가 `onEndReachedThreshold`의 정확하지 않은 위치에서 실행되는 이슈가 있었습니다. 따라서 [해당 라이브러리 issue에 등록](https://github.com/hyochan/react-native-masonry-list/issues/41) 후 부득이하게 버튼을 통해 Load more를 구현하였습니다.
   <br>
   <br>

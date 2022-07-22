@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Dispatch} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {ICommentItem} from '../types';
 import HeartSvg from '../assets/icon/heart-solid.svg';
@@ -6,13 +6,20 @@ import HeartSvg from '../assets/icon/heart-solid.svg';
 interface IProps {
   data: ICommentItem;
   handleCommentLike: (id: number, isLiked: boolean) => void;
+  setCommentItemHeight: Dispatch<React.SetStateAction<number>>;
 }
 
-const CommentItem = ({data, handleCommentLike}: IProps) => {
+const CommentItem = ({
+  data,
+  handleCommentLike,
+  setCommentItemHeight,
+}: IProps) => {
   const {isLiked, text, id} = data;
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onLayout={e => setCommentItemHeight(e.nativeEvent.layout.height)}>
       <HeartSvg
         onPress={() => handleCommentLike(id, !isLiked)}
         fill={isLiked ? '#FF7272' : '#C4C8D3'}
