@@ -5,7 +5,7 @@ import {ICommentItem} from '../types';
 
 interface IProps {
   data: ICommentItem;
-  onPressCommentLikeBtn: any;
+  onPressCommentLikeBtn: (id: number, isLiked: boolean) => void;
 }
 
 const CommentItem = ({data, onPressCommentLikeBtn}: IProps) => {
@@ -21,7 +21,7 @@ const CommentItem = ({data, onPressCommentLikeBtn}: IProps) => {
         style={styles.likeIcon}
       />
       <View style={styles.commentContainer}>
-        <Text style={styles.comment}>{text}</Text>
+        <Text>{text}</Text>
       </View>
     </View>
   );
@@ -31,25 +31,21 @@ export default CommentItem;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
     flexDirection: 'row',
-    alignSelf: 'flex-end',
     alignItems: 'flex-end',
+    alignSelf: 'flex-end',
     marginTop: 5,
+    marginBottom: 10,
   },
 
   commentContainer: {
-    backgroundColor: '#FFD24C',
+    alignItems: 'flex-end',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    alignItems: 'flex-end',
+    backgroundColor: '#FFD24C',
+    borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    borderTopLeftRadius: 10,
-  },
-
-  comment: {
-    // color: 'white',
   },
 
   likeIcon: {

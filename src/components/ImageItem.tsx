@@ -1,17 +1,18 @@
-import {IImageItem} from '../types/index';
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {IImageItem} from '../types/index';
+import {IDetailScreenProp} from '../types/navigator';
 
 interface IProps {
   item: IImageItem;
-  onPressBookmarkBtn: any;
+  onPressBookmarkBtn: (id: string, isBookmarked: boolean) => void;
 }
 
 const ImageItem = ({item, onPressBookmarkBtn}: IProps) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<IDetailScreenProp>();
   const {id, urls, height, isBookmarked} = item;
 
   return (
@@ -46,8 +47,8 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    borderRadius: 10,
     margin: 5,
+    borderRadius: 10,
   },
 
   imageItem: {
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
   },
 
   likeIcon: {
-    marginLeft: 8,
     alignSelf: 'flex-start',
+    marginLeft: 8,
   },
 });
