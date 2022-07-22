@@ -37,12 +37,12 @@ const CommentBar = ({
 }: IProps) => {
   const {id, comments, isBookmarked, user} = data;
 
-  const contentOffset =
-    (commentItemHeight + 15) * comments?.length + headerHeight;
-
   const dispatch = useDispatch();
 
   const [commentValue, setCommentValue] = useState('');
+
+  const contentOffset =
+    (commentItemHeight + 15) * comments?.length + headerHeight;
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
