@@ -11,8 +11,6 @@ interface IProps {
 const CommentItem = ({data, onPressCommentLikeBtn}: IProps) => {
   const {isLiked, text, id} = data;
 
-  console.log(data);
-
   return (
     <View style={styles.container}>
       <Ionicons
