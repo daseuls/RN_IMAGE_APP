@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Button, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  Button,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import MasonryList from '@react-native-seoul/masonry-list';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -7,6 +14,8 @@ import ImageItem from '../components/ImageItem';
 import {getImageList} from '../service/fetchData';
 import {imageInfoSlice} from '../store';
 import {IImageItem, IRootState} from '../types';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -54,7 +63,6 @@ const HomeScreen = () => {
 
   const handleLoadMoreData = () => {
     const fetchData = async () => {
-      console.log('실행');
       const res = await getImageList(page);
       const newList = res.data.map((el: IImageItem) => ({
         ...el,
@@ -76,7 +84,11 @@ const HomeScreen = () => {
           <ImageItem item={item} onPressBookmarkBtn={onPressBookmarkBtn} />
         )}
         ListFooterComponent={
-          <Button title="Load more" onPress={handleLoadMoreData} />
+          <TouchableOpacity onPress={handleLoadMoreData}>
+            <View style={styles.moreDataBtn}>
+              <MaterialIcons name="expand-more" size={50} color="gray" />
+            </View>
+          </TouchableOpacity>
         }
       />
     </SafeAreaView>
@@ -100,5 +112,10 @@ const styles = StyleSheet.create({
 
   imageItem: {
     borderRadius: 10,
+  },
+
+  moreDataBtn: {
+    alignItems: 'center',
+    width: '100%',
   },
 });

@@ -1,5 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, FlatList, Text, View} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {
+  StyleSheet,
+  FlatList,
+  Text,
+  View,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackScreenProps} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -23,7 +30,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const [isShowingBtn, setIsShowingBtn] = useState(false);
 
   const dispatch = useDispatch();
-  const flatListRef = useRef<FlatList<any>>();
+  const flatListRef = useRef<FlatList>(null);
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
@@ -50,7 +57,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
     AsyncStorage.setItem('imageList', JSON.stringify(updatedImageList));
   };
 
-  const handleScrollEvent = e => {
+  const handleScrollEvent = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const {contentSize, layoutMeasurement, contentOffset} = e.nativeEvent;
     if (comments) {
       contentOffset.y > 10 ? setIsShowingBtn(true) : setIsShowingBtn(false);
@@ -88,16 +95,11 @@ const DetailScreen = ({navigation, route}: IProps) => {
               <Text style={styles.userName}>{user.name}</Text>
               <Text style={styles.userRole}> · Instructor</Text>
             </View>
-            <View>
-              <Text>{alt_description}</Text>
-              <Text>{description}</Text>
-              <View style={styles.imageContainer}>
-                <FastImage
-                  style={styles.photoImage}
-                  source={{uri: urls.small}}
-                />
-              </View>
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.description}>{description}</Text>
+              <Text style={styles.description}>{alt_description}</Text>
             </View>
+            <FastImage style={styles.photoImage} source={{uri: urls.small}} />
           </View>
         }
         data={comments}
@@ -155,9 +157,19 @@ const styles = StyleSheet.create({
     color: '#7D88A8',
   },
 
+  descriptionContainer: {
+    padding: 10,
+  },
+
+  description: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#3D3C42',
+  },
+
   photoImage: {
-    width: windowWidth * 0.9,
-    height: windowWidth * 0.9,
+    width: windowWidth * 0.95,
+    height: windowWidth * 0.95,
     borderRadius: 15,
   },
 
@@ -167,7 +179,7 @@ const styles = StyleSheet.create({
   },
 
   previewContentsContainer: {
-    marginTop: 50,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -183,9 +195,5 @@ const styles = StyleSheet.create({
     flexDirection: 'column-reverse',
     flexGrow: 1,
     paddingHorizontal: 10,
-  },
-
-  imageContainer: {
-    alignItems: 'center',
   },
 });

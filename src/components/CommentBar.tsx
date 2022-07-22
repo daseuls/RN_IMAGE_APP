@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {RefObject, useState} from 'react';
 import {
   Text,
   View,
@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,13 +14,21 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {IImageItem, IRootState} from '../types';
 import {imageInfoSlice} from '../store';
 
+interface IProps {
+  data: IImageItem;
+  isContentsShowing: boolean;
+  isShowingBtn: boolean;
+  navigation: any;
+  flatListRef: RefObject<FlatList<any>>;
+}
+
 const CommentBar = ({
   data,
   navigation,
   isContentsShowing,
   isShowingBtn,
   flatListRef,
-}) => {
+}: IProps) => {
   const {id, comments, isBookmarked, user} = data;
 
   const imageList = useSelector((state: IRootState) => {
