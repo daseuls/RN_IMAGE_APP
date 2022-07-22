@@ -11,6 +11,8 @@
 
 # 실행 방법
 
+1.
+
 ```
 git clone https://github.com/daseuls/classom_assignment.git
 ```

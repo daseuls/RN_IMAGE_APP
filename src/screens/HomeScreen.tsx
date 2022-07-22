@@ -21,7 +21,7 @@ const HomeScreen = () => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchImageListData = async () => {
       const localData = await AsyncStorage.getItem('imageList');
       if (localData) {
         AsyncStorage.getItem('imageList', (err, result) => {
@@ -45,21 +45,21 @@ const HomeScreen = () => {
         AsyncStorage.setItem(
           'imageList',
           JSON.stringify(
-            res.data.map((el: IImageItem) => ({...el, isBookmarked: false})),
+            res?.data.map((el: IImageItem) => ({...el, isBookmarked: false})),
           ),
         );
         dispatch(
           imageInfoSlice.actions.update(
-            res.data.map((el: IImageItem) => ({...el, isBookmarked: false})),
+            res?.data.map((el: IImageItem) => ({...el, isBookmarked: false})),
           ),
         );
         AsyncStorage.setItem('page', JSON.stringify(2));
       }
     };
-    fetchData();
+    fetchImageListData();
   }, [dispatch]);
 
-  const onPressBookmarkBtn = (id: string, bool: boolean) => {
+  const handleImageListBookmark = (id: string, bool: boolean) => {
     const updatedList = imageList.map(el =>
       el.id === id ? {...el, isBookmarked: bool} : el,
     );
@@ -71,7 +71,8 @@ const HomeScreen = () => {
   const handleLoadMoreData = () => {
     const fetchData = async () => {
       const res = await getImageList(pageNumber);
-      const newList = res.data.map((el: IImageItem) => ({
+      console.log(res);
+      const newList = res?.data.map((el: IImageItem) => ({
         ...el,
         isBookmarked: false,
       }));
@@ -88,7 +89,10 @@ const HomeScreen = () => {
         numColumns={2}
         data={imageList}
         renderItem={({item}) => (
-          <ImageItem item={item} onPressBookmarkBtn={onPressBookmarkBtn} />
+          <ImageItem
+            item={item}
+            handleImageListBookmark={handleImageListBookmark}
+          />
         )}
         ListFooterComponent={
           <TouchableOpacity onPress={handleLoadMoreData}>

@@ -8,18 +8,18 @@ import {IDetailScreenProp} from '../types/navigator';
 
 interface IProps {
   item: IImageItem;
-  onPressBookmarkBtn: (id: string, isBookmarked: boolean) => void;
+  handleImageListBookmark: (id: string, isBookmarked: boolean) => void;
 }
 
-const ImageItem = ({item, onPressBookmarkBtn}: IProps) => {
-  const navigation = useNavigation<IDetailScreenProp>();
+const ImageItem = ({item, handleImageListBookmark}: IProps) => {
+  const {navigate} = useNavigation<IDetailScreenProp>();
   const {id, urls, height, isBookmarked} = item;
 
   return (
     <>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('Detail', {data: item});
+          navigate('Detail', {data: item});
         }}
         key={id}
         style={styles.imageContainer}>
@@ -33,7 +33,7 @@ const ImageItem = ({item, onPressBookmarkBtn}: IProps) => {
         color={isBookmarked ? '#FF7272' : '#C4C8D3'}
         style={styles.likeIcon}
         size={20}
-        onPress={() => onPressBookmarkBtn(id, !isBookmarked)}
+        onPress={() => handleImageListBookmark(id, !isBookmarked)}
       />
     </>
   );

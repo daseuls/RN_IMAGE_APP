@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   FlatList,
@@ -32,11 +32,15 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const [isContentsShowing, setIsContentsShowing] = useState(true);
   const [isShowingBtn, setIsShowingBtn] = useState(false);
 
-  useEffect(() => {
+  const handleCheckContentsShowing = useCallback(() => {
     if (comments?.length >= 10) {
       setIsContentsShowing(false);
     }
-  }, [comments]);
+  }, [comments?.length]);
+
+  useEffect(() => {
+    handleCheckContentsShowing();
+  }, [handleCheckContentsShowing]);
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
@@ -46,7 +50,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
     return state.pageNumber.value;
   });
 
-  const onPressCommentLikeBtn = (commentId: number, bool: boolean) => {
+  const handleCommentLike = (commentId: number, bool: boolean) => {
     const updatedCommentList = comments.map(comment =>
       comment.id === commentId ? {...comment, isLiked: bool} : comment,
     );
@@ -88,10 +92,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
         scrollEventThrottle={100}
         inverted
         renderItem={({item}) => (
-          <CommentItem
-            data={item}
-            onPressCommentLikeBtn={onPressCommentLikeBtn}
-          />
+          <CommentItem data={item} handleCommentLike={handleCommentLike} />
         )}
         ListFooterComponent={
           comments ? null : (

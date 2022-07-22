@@ -5,16 +5,16 @@ import {ICommentItem} from '../types';
 
 interface IProps {
   data: ICommentItem;
-  onPressCommentLikeBtn: (id: number, isLiked: boolean) => void;
+  handleCommentLike: (id: number, isLiked: boolean) => void;
 }
 
-const CommentItem = ({data, onPressCommentLikeBtn}: IProps) => {
+const CommentItem = ({data, handleCommentLike}: IProps) => {
   const {isLiked, text, id} = data;
 
   return (
     <View style={styles.container}>
       <Ionicons
-        onPress={() => onPressCommentLikeBtn(id, !isLiked)}
+        onPress={() => handleCommentLike(id, !isLiked)}
         name="heart"
         size={18}
         color={isLiked ? '#FF7272' : '#C4C8D3'}
