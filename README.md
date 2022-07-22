@@ -13,6 +13,8 @@
 
 # 요구 사항
 
+> ✅ 체크 표시 한 것들은 구현 완료된 기능입니다.
+
 ### 1. 게시글 목록
 
 - ✅ 사진과 같이 ListItem의 height는 Dynamic입니다. (contents size)
@@ -20,7 +22,7 @@
 - ✅ 해당 게시글에 대한 좋아요 표기도 되어야합니다.
 - ✅ 기본적으로 load more 기능을 구현합니다
 - ✅ 해당 아이템을 누르면 각각의 게시글 상세로 진입해야 합니다.
-- 게시글 상세의 좋아요 버튼을 터치 했을 때, 리스트에 해당 내용이 반영되어야합니다.
+- ✅ 게시글 상세의 좋아요 버튼을 터치 했을 때, 리스트에 해당 내용이 반영되어야합니다.
 - ✅ 게시글의 데이터는 많을수록 좋습니다. 최소 1000개 이상.
 
 ### 2. 게시글 상세
@@ -64,13 +66,6 @@
 
 1. 이미지 리스트 Load more 기능을 구현하는 과정에서 발생한 이슈
 
-masynryList 라이브러리에서도 flatList와 같이 onEndReachedThreshold, onEndReached 메서드 사용이 가능했기에 두 메서드를 이용하여 infinite Scroll을 구현하고 싶었으나,
-
-- masonsy 라이브러리 사용시 onEndReach 함수 호출 시 해당 함수가 여러 번 호출되는 이슈와
-  https://github.com/hyochan/react-native-masonry-list/issues/11
-
-  - onEndReach 함수가 onEndReachedThreshold의 정확하지 않은 위치에서 실행되는 이슈가 있었습니다.
-
-  따라서 issue에 등록 후 부득이하게 버튼을 통해 Load more를 구현하였습니다.
-
-https://github.com/hyochan/react-native-masonry-list/issues/41
+- masynryList 라이브러리에서도 flatList와 같이 onEndReachedThreshold, onEndReached 메서드 사용이 가능했기에 두 메서드를 이용하여 infinite Scroll을 구현하고 싶었으나, <br />
+  masonsy 라이브러리 사용시 onEndReach 함수 호출 시 [해당 함수가 여러 번 호출되는 이슈](https://github.com/hyochan/react-native-masonry-list/issues/11)와 <br />
+  onEndReach 함수가 onEndReachedThreshold의 정확하지 않은 위치에서 실행되는 이슈가 있었습니다. 따라서 [해당 라이브러리 issue에 등록(https://github.com/hyochan/react-native-masonry-list/issues/41)] 후 부득이하게 버튼을 통해 Load more를 구현하였습니다.
