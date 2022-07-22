@@ -36,6 +36,10 @@ const DetailScreen = ({navigation, route}: IProps) => {
     return state.imageInfo.value;
   });
 
+  const pageNumber = useSelector((state: IRootState) => {
+    return state.pageNumber.value;
+  });
+
   const onPressCommentLikeBtn = (commentId: number, bool: boolean) => {
     const updatedCommentList = comments.map(comment =>
       comment.id === commentId ? {...comment, isLiked: bool} : comment,
@@ -55,6 +59,7 @@ const DetailScreen = ({navigation, route}: IProps) => {
     });
     dispatch(imageInfoSlice.actions.update(updatedImageList));
     AsyncStorage.setItem('imageList', JSON.stringify(updatedImageList));
+    AsyncStorage.setItem('page', JSON.stringify(pageNumber));
   };
 
   const handleScrollEvent = (e: NativeSyntheticEvent<NativeScrollEvent>) => {

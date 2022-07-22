@@ -16,7 +16,7 @@ export const pageNumberSlice = createSlice({
   initialState: {value: 2},
   reducers: {
     increase: (state, action) => {
-      state.value = state.value + action.payload;
+      state.value = action.payload;
     },
   },
 });

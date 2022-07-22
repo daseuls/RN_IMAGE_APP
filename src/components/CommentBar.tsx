@@ -34,6 +34,11 @@ const CommentBar = ({
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
   });
+
+  const pageNumber = useSelector((state: IRootState) => {
+    return state.pageNumber.value;
+  });
+
   const dispatch = useDispatch();
 
   const [commentValue, setCommentValue] = useState('');
@@ -82,6 +87,7 @@ const CommentBar = ({
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
       }
     }
+    AsyncStorage.setItem('page', JSON.stringify(pageNumber));
   };
 
   const onPressBookmarkBtn = (imageId: string, bool: boolean) => {

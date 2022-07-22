@@ -5,14 +5,13 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import AsyncStorage from '@react-native-community/async-storage';
 import ImageItem from '../components/ImageItem';
 import {getImageList} from '../service/fetchData';
-import {imageInfoSlice} from '../store';
+import {imageInfoSlice, pageNumberSlice} from '../store';
 import {IImageItem, IRootState} from '../types';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-  const [page, setPage] = useState(2);
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
@@ -21,8 +20,6 @@ const HomeScreen = () => {
   const pageNumber = useSelector((state: IRootState) => {
     return state.pageNumber.value;
   });
-
-  console.log(pageNumber);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +30,12 @@ const HomeScreen = () => {
             console.log(err);
           }
           dispatch(imageInfoSlice.actions.update(JSON.parse(result)));
+        });
+        AsyncStorage.getItem('page', (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+          dispatch(pageNumberSlice.actions.increase(JSON.parse(result)));
         });
       } else {
         const res = await getImageList(1);
@@ -47,6 +50,7 @@ const HomeScreen = () => {
             res.data.map((el: IImageItem) => ({...el, isBookmarked: false})),
           ),
         );
+        AsyncStorage.setItem('page', JSON.stringify(2));
       }
     };
     fetchData();
@@ -58,17 +62,18 @@ const HomeScreen = () => {
     );
     dispatch(imageInfoSlice.actions.update(updatedList));
     AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
+    AsyncStorage.setItem('page', JSON.stringify(pageNumber));
   };
 
   const handleLoadMoreData = () => {
     const fetchData = async () => {
-      const res = await getImageList(page);
+      const res = await getImageList(pageNumber);
       const newList = res.data.map((el: IImageItem) => ({
         ...el,
         isBookmarked: false,
       }));
       dispatch(imageInfoSlice.actions.update([...imageList, ...newList]));
-      setPage(prev => prev + 1);
+      dispatch(pageNumberSlice.actions.increase(pageNumber + 1));
     };
     fetchData();
   };
