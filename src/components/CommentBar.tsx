@@ -5,7 +5,6 @@ import {
   TouchableNativeFeedback,
   StyleSheet,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -22,8 +21,6 @@ const CommentBar = ({
   flatListRef,
 }) => {
   const {id, comments, isBookmarked, user} = data;
-
-  console.log(data);
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
@@ -59,6 +56,7 @@ const CommentBar = ({
         });
         dispatch(imageInfoSlice.actions.update(updatedList));
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
+        flatListRef.current?.scrollToEnd();
       } else {
         const updatedList = imageList.map((imageInfo: IImageItem) =>
           imageInfo.id === id
@@ -75,7 +73,6 @@ const CommentBar = ({
         AsyncStorage.setItem('imageList', JSON.stringify(updatedList));
       }
     }
-    flatListRef.current?.scrollToEnd();
   };
 
   const onPressBookmarkBtn = (imageId: string, bool: boolean) => {
