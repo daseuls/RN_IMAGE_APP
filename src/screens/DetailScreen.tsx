@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   FlatList,
@@ -31,6 +31,12 @@ const DetailScreen = ({navigation, route}: IProps) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isContentsShowing, setIsContentsShowing] = useState(true);
   const [isShowingBtn, setIsShowingBtn] = useState(false);
+
+  useEffect(() => {
+    if (comments?.length >= 10) {
+      setIsContentsShowing(false);
+    }
+  }, [comments]);
 
   const imageList = useSelector((state: IRootState) => {
     return state.imageInfo.value;
