@@ -169,5 +169,3 @@ npx react-native run-android
   <br>
   <br>
   <br>
-
-부족하지만 저의 실력 내에서 열심히 구현해보았습니다. 감사합니다.
