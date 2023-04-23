@@ -23,7 +23,7 @@ React Native 프론트엔드 개발 구현 과제 입니다.
 2. 해당 폴더로 이동
 
 ```
-cd classom_assignment
+cd RN_IMAGE_APP
 ```
 
 3. 필요 package 설치
