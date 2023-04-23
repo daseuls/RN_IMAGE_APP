@@ -1,6 +1,6 @@
-# Classom Assignment
+# React native Assignment
 
-클라썸 React Native 프론트엔드 개발 구현 과제 입니다.
+React Native 프론트엔드 개발 구현 과제 입니다.
 
 > 개발자 : 이다슬<br>
 > 개발 기간 : 7/15 - 7/22
